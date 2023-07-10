@@ -294,6 +294,77 @@ app.get("/sedes", async(req, res) => {
     }
 });
 
+// get a contract by user id
+app.get("/reservas", async(req, res) => {
+    try {
+        const { user_id } = req.query;
+
+        let reservas;
+
+        console.log('---------------------- user_id is: ', user_id)
+
+        reservas = await pool.query("SELECT * from sede_reservations WHERE user_id = $1", [user_id]);
+
+        console.log('reservas: ', reservas);
+        res.json(reservas.rows);
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+});
+
+// update individual - cuidador
+app.put("/sedes/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { address, name, cupo } = req.body;
+        console.log('address: ', address);
+        console.log('name: ', name);
+        console.log('cupo: ', cupo);
+        const updateSede = await pool.query(
+            "UPDATE sede SET address = $1, max_cupo = $2, name = $3  WHERE id = $4 RETURNING *", 
+            [address, cupo, name, id]
+        );
+
+        console.log('updateSede: ', updateSede)
+
+        if(updateSede.rowCount > 0){
+            res.json(updateSede.rows[0]);
+            // res.json('asd');
+        }
+        else {
+            res.json('Oops! No sede with given ID (' + id + ') has been found.');
+        }
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // get all - user types
 app.get("/user_types", async(req, res) => {
     try {
@@ -479,7 +550,7 @@ app.get("/contract", async(req, res) => {
     }
 });
 
-// get a contract by user id
+// get payment methods
 app.get("/payment_methods", async(req, res) => {
     try {
         let payment_methods;
@@ -1014,7 +1085,7 @@ app.get("/caregiver_get_available_dates", async (req, res) => {
 });
 
 // get (by id) individual - cuidador
-app.get("/cuidadores/:id", async(req, res) => {
+app.get("/users/:id", async(req, res) => {
     try {
         const {id} = req.params;
         const user = await pool.query("SELECT * FROM users WHERE id = $1", [id]);

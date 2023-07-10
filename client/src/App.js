@@ -8,11 +8,11 @@ import VerSedesPage from './routes/VerSedesPage';
 import LandingCuidadorPage from './routes/LandingCuidadorPage';
 import LandingAdminPage from './routes/LandingAdminPage';
 import FechasHorariosPage from './routes/FechasHorariosPage';
-import MisContratosPage from './routes/MisContratosPage';
+import MisReservasPage from './routes/MisReservasPage';
 import AccountPage from './routes/AccountPage';
 import SuccessPage from './routes/SuccessPage';
 import FailurePage from './routes/FailurePage';
-import ContractsPage from './routes/ContractsPage';
+import SedesAdminPage from './routes/SedesAdminPage';
 import { AuthProvider, AuthContext } from './components/AuthContext';
 
 import './App.css';
@@ -82,10 +82,10 @@ const App = () => {
 				} 
 				/>
 				<Route 
-				path="/mis-contratos"
+				path="/mis-reservas"
 				element={
 					<>
-					{ <MisContratosPage /> }
+					{ <MisReservasPage /> }
 					</>
 				} 
 				/>
@@ -106,10 +106,10 @@ const App = () => {
 				} 
 				/>
 				<Route 
-				path="/contracts"
+				path="/sedes-admin"
 				element={
 					<>
-					{ <ContractsPage /> }
+					{ <SedesAdminPage /> }
 					</>
 				} 
 				/>

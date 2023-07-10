@@ -209,7 +209,10 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
-1	san martin 1575	50	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede centro
+2	Av. San Martín 2595, A4400 Salta, Argentina	512	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	asd minuscula
+3	Av. San Martín 4544, A4400 Salta, Argentina	888	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede oeste
+4	Av. San Martín 2595, A4400 Salta, Argentina	999	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede funes
+1	Av. San Martín 1575, A4400 Salta, Argentina	123	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	ASD mayuscula
 \.
 
 
@@ -219,6 +222,10 @@ COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
 
 COPY public.sede_reservations (id, user_id, sede_id, horario, date) FROM stdin;
 1	50	1	"15:00"	10/07/2023
+2	155	1	"21:00"	10/07/2023
+3	50	1	"15:00"	11/07/2023
+4	50	1	"15:00"	12/07/2023
+5	50	1	"15:00"	15/07/2023
 \.
 
 
@@ -261,14 +268,14 @@ COPY public.users (id, description, name, last_name, password, mail, type, creat
 -- Name: sede_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sede_id_seq', 1, false);
+SELECT pg_catalog.setval('public.sede_id_seq', 1, true);
 
 
 --
 -- Name: sede_reservations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sede_reservations_id_seq', 1, false);
+SELECT pg_catalog.setval('public.sede_reservations_id_seq', 2, true);
 
 
 --
@@ -282,7 +289,7 @@ SELECT pg_catalog.setval('public.user_type_id_seq', 3, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 56, true);
+SELECT pg_catalog.setval('public.users_id_seq', 57, true);
 
 
 --
