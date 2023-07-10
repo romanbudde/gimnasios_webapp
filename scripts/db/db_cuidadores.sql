@@ -24,104 +24,25 @@ CREATE DATABASE db_cuidadores;
 \connect db_cuidadores;
 
 --
--- Name: caregiver_availability; Type: TABLE; Schema: public; Owner: postgres
+-- Name: sede; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.caregiver_availability (
-    id bigint NOT NULL,
-    caregiver_id bigint NOT NULL,
-    dates json NOT NULL
-);
-
-
-ALTER TABLE public.caregiver_availability OWNER TO postgres;
-
---
--- Name: caregiver_availability_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.caregiver_availability_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.caregiver_availability_id_seq OWNER TO postgres;
-
---
--- Name: caregiver_availability_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.caregiver_availability_id_seq OWNED BY public.caregiver_availability.id;
-
-
---
--- Name: caregiver_score; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.caregiver_score (
+CREATE TABLE public.sede (
     id integer NOT NULL,
-    caregiver_id integer NOT NULL,
-    customer_id integer NOT NULL,
-    observation character varying(500) NOT NULL,
-    score numeric NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    modified_at timestamp without time zone
-);
-
-
-ALTER TABLE public.caregiver_score OWNER TO postgres;
-
---
--- Name: caregiver_score_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.caregiver_score_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.caregiver_score_id_seq OWNER TO postgres;
-
---
--- Name: caregiver_score_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.caregiver_score_id_seq OWNED BY public.caregiver_score.id;
-
-
---
--- Name: contract; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.contract (
-    id integer NOT NULL,
-    status character varying NOT NULL,
-    date character varying NOT NULL,
-    customer_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    modified_at timestamp without time zone NOT NULL,
-    amount real NOT NULL,
-    caregiver_id integer NOT NULL,
+    address character varying NOT NULL,
+    max_cupo integer NOT NULL,
     horarios json NOT NULL,
-    payment_method_id integer,
-    payment_status character varying
+    name character varying NOT NULL
 );
 
 
-ALTER TABLE public.contract OWNER TO postgres;
+ALTER TABLE public.sede OWNER TO postgres;
 
 --
--- Name: contract_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: sede_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.contract_id_seq
+CREATE SEQUENCE public.sede_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -130,33 +51,35 @@ CREATE SEQUENCE public.contract_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.contract_id_seq OWNER TO postgres;
+ALTER TABLE public.sede_id_seq OWNER TO postgres;
 
 --
--- Name: contract_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: sede_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.contract_id_seq OWNED BY public.contract.id;
+ALTER SEQUENCE public.sede_id_seq OWNED BY public.sede.id;
 
 
 --
--- Name: payment_methods; Type: TABLE; Schema: public; Owner: postgres
+-- Name: sede_reservations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.payment_methods (
+CREATE TABLE public.sede_reservations (
     id integer NOT NULL,
-    name character varying NOT NULL,
-    enabled boolean NOT NULL
+    user_id integer NOT NULL,
+    sede_id integer NOT NULL,
+    horario json NOT NULL,
+    date character varying NOT NULL
 );
 
 
-ALTER TABLE public.payment_methods OWNER TO postgres;
+ALTER TABLE public.sede_reservations OWNER TO postgres;
 
 --
--- Name: payment_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: sede_reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.payment_methods_id_seq
+CREATE SEQUENCE public.sede_reservations_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -165,13 +88,13 @@ CREATE SEQUENCE public.payment_methods_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.payment_methods_id_seq OWNER TO postgres;
+ALTER TABLE public.sede_reservations_id_seq OWNER TO postgres;
 
 --
--- Name: payment_methods_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: sede_reservations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.payment_methods_id_seq OWNED BY public.payment_methods.id;
+ALTER SEQUENCE public.sede_reservations_id_seq OWNED BY public.sede_reservations.id;
 
 
 --
@@ -254,31 +177,17 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: caregiver_availability id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: sede id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.caregiver_availability ALTER COLUMN id SET DEFAULT nextval('public.caregiver_availability_id_seq'::regclass);
-
-
---
--- Name: caregiver_score id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.caregiver_score ALTER COLUMN id SET DEFAULT nextval('public.caregiver_score_id_seq'::regclass);
+ALTER TABLE ONLY public.sede ALTER COLUMN id SET DEFAULT nextval('public.sede_id_seq'::regclass);
 
 
 --
--- Name: contract id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: sede_reservations id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.contract ALTER COLUMN id SET DEFAULT nextval('public.contract_id_seq'::regclass);
-
-
---
--- Name: payment_methods id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.payment_methods ALTER COLUMN id SET DEFAULT nextval('public.payment_methods_id_seq'::regclass);
+ALTER TABLE ONLY public.sede_reservations ALTER COLUMN id SET DEFAULT nextval('public.sede_reservations_id_seq'::regclass);
 
 
 --
@@ -296,109 +205,20 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: caregiver_availability; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: sede; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.caregiver_availability (id, caregiver_id, dates) FROM stdin;
-9	4	{"30/05/2023":["06:30","07:00","07:30"],"31/05/2023":["08:00","08:30","09:00"]}
-3	48	{"14/05/2023":["04:00","04:30","05:00"],"15/05/2023":["05:00","05:30","06:00"],"16/05/2023":["06:30","07:00","07:30"],"17/05/2023":["08:00","08:30","09:00"],"02/06/2023":["02:30","03:00","07:30","08:00","08:30","09:00","09:30","10:00"],"03/06/2023":["01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00"],"09/06/2023":["02:00","02:30","03:00","03:30","04:00","04:30"],"10/06/2023":["03:00","03:30","04:00","04:30"],"11/06/2023":["02:00","03:30","04:00","04:30"],"14/06/2023":[],"15/06/2023":[],"16/06/2023":[],"17/06/2023":[],"24/06/2023":["18:00","19:00","20:00","20:30","21:00","21:30","22:00","22:30"],"25/06/2023":["22:00","22:30"],"26/06/2023":["19:30","20:00","20:30","21:00"],"27/06/2023":["19:00","19:30","20:00","21:30","22:00","22:30"],"28/06/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"29/06/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"30/06/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"30/07/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"31/07/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"01/08/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"02/08/2023":["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"]}
-10	51	{"03/07/2023":["22:30","23:00"],"04/07/2023":["17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"05/07/2023":["17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"06/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"07/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"08/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"09/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"10/07/2023":["18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"11/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"12/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"13/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"14/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"15/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"16/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"17/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"18/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"19/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"20/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"21/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"22/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"23/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"24/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"25/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"26/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"27/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"28/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"29/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"30/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"31/07/2023":["16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"]}
+COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
+1	san martin 1575	50	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede centro
 \.
 
 
 --
--- Data for Name: caregiver_score; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: sede_reservations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.caregiver_score (id, caregiver_id, customer_id, observation, score, created_at, modified_at) FROM stdin;
-2	4	2	review dos	8.5	2023-04-10 12:34:56	2023-04-10 12:34:56
-1	6	2	el mejor servicio de todos	9.5	2023-04-10 12:34:56	2023-04-10 12:34:56
-3	30	2	review tres	7.5	2023-04-10 12:34:56	2023-04-10 12:34:56
-4	48	2	review cuatro	6.5	2023-04-10 12:34:56	2023-04-10 12:34:56
-6	6	2	el mejor servicio lejos	8	2023-05-11 15:25:13.574	\N
-7	6	2	el mejor servicio lejos	8	2023-05-11 15:25:55.713	\N
-38	6	2	el mejor servicio lejos	7	2023-05-11 16:02:27.524	\N
-39	6	2	el mejor servicio lejos	7	2023-05-11 16:03:34.143	\N
-40	6	2	el mejor servicio lejos	7	2023-05-11 16:03:57.092	\N
-41	6	2	el mejor servicio lejos	7	2023-05-11 16:05:17.656	\N
-42	6	2	el mejor servicio lejos	7	2023-05-11 16:07:12.944	\N
-43	6	2	el mejor servicio lejos	7	2023-05-11 16:11:17.508	\N
-44	6	2	el mejor servicio lejos	7	2023-05-11 16:11:35.94	\N
-45	6	2	el mejor servicio lejos	7	2023-05-11 16:11:59.325	\N
-46	6	2	el mejor servicio lejos	7	2023-05-11 16:12:56.677	\N
-47	6	2	el mejor servicio lejos	7	2023-05-11 16:13:11.435	\N
-48	6	2	el mejor servicio lejos	7	2023-05-11 16:13:26.826	\N
-49	6	2	el mejor servicio lejos	7	2023-05-11 16:13:45.884	\N
-50	6	2	el mejor servicio lejos	7	2023-05-11 16:14:21.988	\N
-51	6	2	el mejor servicio lejos	8	2023-05-11 16:14:37.817	\N
-52	6	2	el mejor servicio lejos	8	2023-05-11 16:15:28.664	\N
-53	6	2	el mejor servicio lejos	8	2023-05-11 16:17:43.511	\N
-54	49	2	el mejor servicio lejos	8	2023-05-11 16:18:38.832	\N
-55	49	2	el mejor servicio lejos	7	2023-05-11 16:18:43.847	\N
-56	49	2	el mejor servicio lejos	7	2023-05-11 16:19:15.397	\N
-57	49	2	el mejor servicio lejos	6	2023-05-11 16:19:20.047	\N
-58	49	2	el mejor servicio lejos	10	2023-05-11 16:19:30.053	\N
-59	49	2	el mejor servicio lejos	10	2023-05-11 16:19:30.728	\N
-60	49	2	el mejor servicio lejos	10	2023-05-11 16:19:33.368	\N
-61	49	2	el mejor servicio lejos	10	2023-05-11 16:19:35.287	\N
-62	49	2	el mejor servicio lejos	10	2023-05-11 16:20:31.156	\N
-63	49	2	el mejor servicio lejos	10	2023-05-11 16:34:24.556	\N
-64	49	2	el mejor servicio lejos	10	2023-05-11 16:35:25.347	\N
-65	48	2	el mejor servicio lejos	10	2023-05-11 16:40:56.726	\N
-66	48	2	el mejor servicio lejos	10	2023-05-11 16:43:23.537	\N
-67	48	2	el mejor servicio lejos	10	2023-05-11 16:43:35.809	\N
-68	48	2	el mejor servicio lejos	10	2023-05-11 16:43:48.122	\N
-69	48	2	el mejor servicio lejos	10	2023-05-11 16:44:59.035	\N
-70	4	2	el mejor servicio lejos	10	2023-05-11 16:49:46.464	\N
-\.
-
-
---
--- Data for Name: contract; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.contract (id, status, date, customer_id, created_at, modified_at, amount, caregiver_id, horarios, payment_method_id, payment_status) FROM stdin;
-1	active	15/06/2023	50	2023-06-13 11:46:21.859	2023-06-13 11:46:21.859	21	48	["03:00"]	\N	\N
-2	active	15/06/2023	50	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	48	["03:30"]	\N	\N
-4	active	14/06/2023	50	2023-06-13 12:16:31.982	2023-06-13 12:16:31.982	21	48	["02:30"]	\N	\N
-8	active	17/06/2023	50	2023-06-13 14:09:11.084	2023-06-13 14:09:11.084	21	48	["04:30"]	\N	\N
-10	active	11/06/2023	50	2023-06-13 14:57:00.427	2023-06-13 14:57:00.427	21	48	["03:00"]	\N	\N
-11	active	11/06/2023	50	2023-06-13 14:57:05.688	2023-06-13 14:57:05.688	21	48	["02:30"]	\N	\N
-12	active	10/06/2023	50	2023-06-13 14:57:10.611	2023-06-13 14:57:10.611	21	48	["02:30"]	\N	\N
-13	active	10/06/2023	50	2023-06-13 15:04:51.517	2023-06-13 15:04:51.517	21	48	["02:00"]	\N	\N
-3	inactive	15/06/2023	50	2023-06-13 12:15:32.325	2023-06-13 12:15:32.325	21	48	["04:30"]	\N	\N
-5	inactive	14/06/2023	50	2023-06-13 13:06:44.39	2023-06-13 13:06:44.39	21	48	["05:30"]	\N	\N
-9	inactive	02/06/2023	50	2023-06-13 14:44:05.229	2023-06-13 14:44:05.229	63	48	["04:30","05:30","02:00"]	\N	\N
-6	cancelled	15/06/2023	50	2023-06-13 13:07:13.505	2023-06-13 13:07:13.505	21	48	["05:00"]	\N	\N
-7	completed	16/06/2023	50	2023-06-13 13:30:48.454	2023-06-13 13:30:48.454	21	48	["04:30"]	\N	\N
-14	active	26/06/2023	50	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	48	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-15	active	30/07/2023	50	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	48	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-16	active	08/08/2023	998	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	755	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-17	inactive	15/08/2023	998	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	755	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-18	inactive	19/08/2023	998	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	755	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-19	completed	15/05/2023	998	2023-06-13 12:14:41.018	2023-06-13 12:14:41.018	21	755	["19:30", "20:00", "20:30", "21:00"]	\N	\N
-20	active	03/07/2023	50	2023-07-03 16:08:03.765	2023-07-03 16:08:03.765	55	51	["17:30"]	\N	\N
-21	active	03/07/2023	50	2023-07-03 17:16:45.357	2023-07-03 17:16:45.357	55	51	["18:00"]	\N	\N
-22	active	03/07/2023	50	2023-07-03 17:35:10.048	2023-07-03 17:35:10.048	55	51	["21:00"]	2	pending
-23	active	03/07/2023	50	2023-07-03 17:37:59.072	2023-07-03 17:37:59.072	55	51	["21:30"]	2	pending
-24	active	03/07/2023	50	2023-07-03 17:39:28.913	2023-07-03 17:39:28.913	55	51	["22:00"]	1	pending
-25	pending	10/07/2023	50	2023-07-10 10:16:36.268	2023-07-10 10:16:36.268	55	51	["16:30"]	1	pending
-28	active	10/07/2023	50	2023-07-10 10:20:15.692	2023-07-10 10:20:15.692	55	51	["16:30"]	1	approved
-29	active	10/07/2023	50	2023-07-10 10:20:41.047	2023-07-10 10:20:41.047	55	51	["17:00"]	2	pending
-30	active	10/07/2023	50	2023-07-10 10:21:03.839	2023-07-10 10:21:03.839	55	51	["17:30"]	2	pending
-31	active	10/07/2023	50	2023-07-10 12:03:35.378	2023-07-10 12:03:35.378	55	51	["18:00"]	1	approved
-32	pending	10/07/2023	50	2023-07-10 12:07:28.77	2023-07-10 12:07:28.77	55	51	["18:30"]	1	pending
-33	inactive	10/07/2023	50	2023-07-10 12:08:49.656	2023-07-10 12:08:49.656	55	51	["18:30"]	1	pending
-\.
-
-
---
--- Data for Name: payment_methods; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.payment_methods (id, name, enabled) FROM stdin;
-1	Mercado Pago	t
-2	Efectivo	t
+COPY public.sede_reservations (id, user_id, sede_id, horario, date) FROM stdin;
+1	50	1	"15:00"	10/07/2023
 \.
 
 
@@ -438,31 +258,17 @@ COPY public.users (id, description, name, last_name, password, mail, type, creat
 
 
 --
--- Name: caregiver_availability_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: sede_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.caregiver_availability_id_seq', 10, true);
-
-
---
--- Name: caregiver_score_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.caregiver_score_id_seq', 70, true);
+SELECT pg_catalog.setval('public.sede_id_seq', 1, false);
 
 
 --
--- Name: contract_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: sede_reservations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.contract_id_seq', 33, true);
-
-
---
--- Name: payment_methods_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.payment_methods_id_seq', 2, true);
+SELECT pg_catalog.setval('public.sede_reservations_id_seq', 1, false);
 
 
 --
@@ -480,35 +286,19 @@ SELECT pg_catalog.setval('public.users_id_seq', 56, true);
 
 
 --
--- Name: caregiver_availability caregiver_availability_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: sede sede_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.caregiver_availability
-    ADD CONSTRAINT caregiver_availability_pkey PRIMARY KEY (id);
-
-
---
--- Name: caregiver_score caregiver_score_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.caregiver_score
-    ADD CONSTRAINT caregiver_score_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.sede
+    ADD CONSTRAINT sede_pkey PRIMARY KEY (id);
 
 
 --
--- Name: contract contract_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: sede_reservations sede_reservations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.contract
-    ADD CONSTRAINT contract_pkey PRIMARY KEY (id);
-
-
---
--- Name: payment_methods payment_methods_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.payment_methods
-    ADD CONSTRAINT payment_methods_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.sede_reservations
+    ADD CONSTRAINT sede_reservations_pkey PRIMARY KEY (id);
 
 
 --

@@ -272,11 +272,22 @@ app.post('/register', async(req, res) => {
     }
 });
 
-// get all - cuidadores
-app.get("/cuidadores", async(req, res) => {
+// get all - users
+app.get("/users", async(req, res) => {
     try {
-        const allCuidadores = await pool.query("SELECT * from users")
-        res.json(allCuidadores.rows);
+        const allUsers = await pool.query("SELECT * from users")
+        res.json(allUsers.rows);
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+});
+
+// get all - sedes
+app.get("/sedes", async(req, res) => {
+    try {
+        const allSedes = await pool.query("SELECT * from sede")
+        res.json(allSedes.rows);
     }
     catch (error) {
         console.error(error.message);

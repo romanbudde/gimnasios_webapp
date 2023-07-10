@@ -29,8 +29,8 @@ const ListUsers = () => {
 		navigate('/landing');
 	}
 
-	const redirectBuscarCuidadores = () => {
-		navigate('/filter-cuidadores');
+	const redirectVerSedes = () => {
+		navigate('/ver-sedes');
 	}
 
 	const redirectVerMisContratos = () => {
@@ -55,15 +55,15 @@ const ListUsers = () => {
 					<div className='space-y-5 p-10 my-2 mx-auto flex flex-col justify-center items-center'>
 						<button
 							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-							onClick={ (e) => { redirectBuscarCuidadores(e) }}
+							onClick={ (e) => { redirectVerSedes(e) }}
 						>
-							Buscar cuidadores
+							Ver las sedes
 						</button>
 						<button
 							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
 							onClick={ (e) => { redirectVerMisContratos(e) }}
 						>
-							Ver mis contratos
+							Ver mis reservas anteriores
 						</button>
 						<button
 							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'

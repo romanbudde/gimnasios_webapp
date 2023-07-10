@@ -4,7 +4,7 @@ import HomePage from './routes/HomePage';
 import UsersListPage from './routes/UsersListPage';
 import UserLandingPage from './routes/UserLandingPage';
 import RegisterPage from './routes/RegisterPage';
-import FilterCuidadoresPage from './routes/FilterCuidadoresPage';
+import VerSedesPage from './routes/VerSedesPage';
 import LandingCuidadorPage from './routes/LandingCuidadorPage';
 import LandingAdminPage from './routes/LandingAdminPage';
 import FechasHorariosPage from './routes/FechasHorariosPage';
@@ -74,10 +74,10 @@ const App = () => {
 				} 
 				/>
 				<Route 
-				path="/filter-cuidadores"
+				path="/ver-sedes"
 				element={
 					<>
-					{ <FilterCuidadoresPage /> }
+					{ <VerSedesPage /> }
 					</>
 				} 
 				/>
