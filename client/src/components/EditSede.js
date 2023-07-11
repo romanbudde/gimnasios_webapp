@@ -21,11 +21,10 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
     const [name, setName] = useState('');
     const [id, setId] = useState('');
     const [cupo, setCupo] = useState('');
-    const [hourlyRate, setHourlyRate] = useState('');
 	const [editDataMessageError, setEditDataMessageError] = useState(false);
 	const [displayEditDataMessage, setDisplayEditDataMessage] = useState(false);
-    const [horarios, setHorarios] = useState([]);
-	const [checkedHorarios, setCheckedHorarios] = useState([]);
+    const [horarios, setHorarios] = useState(sede.horarios ? sede.horarios.horarios : '');
+	const [checkedHorarios, setCheckedHorarios] = useState(sede.horarios ? sede.horarios.horarios : '');
     // const [userType, setUserType] = useState('');
 	const navigate = useNavigate();
 	const cookies = new Cookies();
@@ -61,7 +60,7 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 			.required('Campo requerido!'),
 		horarios: Yup.array()
 			.max(24, 'Horarios demasiado largos')
-			.required('Elija al menos un horario.'),
+			// .required('Elija al menos un horario.'),
 	});
 
 	useEffect(() => {
@@ -119,10 +118,10 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
                 id: id
             }
 
-			console.log('user updated: ', sedeUpdate);
+			// console.log('user updated: ', sedeUpdate);
 
-			console.log('------------ sedes', sedes);
-			console.log('------------ displayed sedes', displayedSedes);
+			// console.log('------------ sedes', sedes);
+			// console.log('------------ displayed sedes', displayedSedes);
 
             setSedes(sedes.map((sede) => sede.id === sedeUpdate.id ? sedeUpdate : sede));
             setDisplayedSedes(displayedSedes.map((sede) => sede.id === sedeUpdate.id ? sedeUpdate : sede));
@@ -171,6 +170,7 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 
 	// console.log('options unfiltered: ', optionsUnfiltered)
 	console.log('--------- horarios: ', horarios)
+	console.log('--------- sede.horarios: ', sede.horarios)
 	console.log('--------- checked horarios: ', checkedHorarios)
 
     return (
@@ -253,14 +253,14 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 									<label className="block mb-2 mr-auto text-sm font-medium text-gray-900 dark:text-white">
 										Horarios
 									</label>
-									<Field value={horarios} name="horarios" placeholder="ej: 09:00, 10:00, 11:00, 12:00" className={`${errors.horarios && touched.horarios ?  'bg-gray-50 border text-red-500 placeholder-red-500 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-solid border-opacity-100 focus:outline-none focus:outline-0 border-red-500' : 
-									'bg-gray-50 border text-gray-900 text-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'}`}/>
+									<Field readOnly value={horarios} name="horarios" placeholder="ej: 09:00, 10:00, 11:00, 12:00" className={`${errors.horarios && touched.horarios ?  'bg-gray-50 border text-red-500 placeholder-red-500 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-solid border-opacity-100 focus:outline-none focus:outline-0 border-red-500' : 
+									'bg-gray-50 border text-gray-900 text-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'} overflow-x-scroll`}/>
 										{errors.horarios && touched.horarios ? (
 											<div className='text-red-500 font-normal w-full text-sm text-left'>
 												{errors.horarios}
 											</div>
 										) : null}
-									<ul className="text-black flex flex-col w-full rounded-md max-h-44 overflow-scroll">
+									<ul className="text-black flex flex-col w-full rounded-md max-h-44 mt-2 overflow-scroll">
 										{ optionsUnfiltered.map((horario, index) => (
 											<li className='flex flex-row items-center p-7 gap-2 relative' key={index}>
 												<label htmlFor={horario.value} className='w-full flex items-center cursor-pointer'>

@@ -166,7 +166,7 @@ const SedesAdmin = () => {
 								className='bg-transparent text-green-500 font-semibold py-2 px-4 border border-green-600 rounded-lg w-2/3 my-5'
 								onClick={handleAddSedeModalOpen}
 							>
-								Crear usuario
+								Crear sede
 							</button>
 							{/* <button
 								className='text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-2/3 py-2.5 text-center shadow-lg'

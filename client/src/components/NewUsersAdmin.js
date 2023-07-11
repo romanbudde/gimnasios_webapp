@@ -188,7 +188,7 @@ const NewUsersAdmin = () => {
 			
 			// get coinciding user IDS from user table first, then get contracts
 
-            const response = await fetch(`http://localhost:5000/users?user_email=${userEmail}&user_firstname=${userFirstname}&user_lastname=${userLastname}&status=${statusSearch}`);
+            const response = await fetch(`http://localhost:5000/users_filtered?user_email=${userEmail}&user_firstname=${userFirstname}&user_lastname=${userLastname}&status=${statusSearch}`);
             const jsonData = await response.json();
 
 			console.log('----------------------------------- users: ', jsonData);
@@ -394,7 +394,7 @@ const NewUsersAdmin = () => {
     // };
 
     const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/cuidadores/" + userId);
+		const response = await fetch("http://localhost:5000/users/" + userId);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');

@@ -216,12 +216,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
-1	Av. San Martín 1575, A4400 Salta, Argentina	123	{}	ASD mayuscula
-4	Av. San Martín 2595, A4400 Salta, Argentina	456	{}	Amici sede funes
-7	Av. Pres. Perón 3883, El Palomar, Provincia de Buenos Aires, Argentina	25	{}	New sede 2
-6	Pergamino 3751, C1437 CABA, Argentina	15	{}	NEW sedeee
-3	Av. San Martín 4544, A4400 Salta, Argentina	888	{}	Amici sede oeste
-2	Av. San Martín 2595, A4400 Salta, Argentina	512	{}	asd minuscula
+4	Av. San Martín 2595, A4400 Salta, Argentina	456	{"horarios":["00:00","09:00","10:00","13:00","17:00","18:00","19:00"]}	Amici sede funes
+6	Pergamino 3751, C1437 CABA, Argentina	15	{"horarios":["01:00","06:00","07:00","08:00","18:00","19:00","22:00","23:00"]}	NEW sedeee
+3	Av. San Martín 4544, A4400 Salta, Argentina	888	{"horarios":["00:00","01:00","02:00","07:00","08:00"]}	Amici sede oeste
+7	Av. Pres. Perón 3883, El Palomar, Provincia de Buenos Aires, Argentina	25	{"horarios":["01:00","05:00","06:00","09:00","10:00","13:00","15:00","16:00","17:00"]}	New sede 2
+1	Av. San Martín 1575, A4400 Salta, Argentina	123	{"horarios":["00:00","01:00","02:00","03:00","04:00","10:00","14:00","16:00"]}	ASD mayuscula
+2	Av. San Martín 2595, A4400 Salta, Argentina	512	{"horarios":["00:00","02:00"]}	asd minuscula
+8	Soler 4000, C1425BWP CABA, Argentina	7	{"horarios":["01:00","02:00","04:00"]}	New sedeee jamaica
+9	Acevedo 865, Buenos Aires, Argentina	15	{}	Sede 91
 \.
 
 
@@ -254,8 +256,6 @@ COPY public.user_type (user_type_number, user_type, id) FROM stdin;
 --
 
 COPY public.users (id, description, name, last_name, password, mail, type, created_at, modified_at, enabled, hourly_rate, average_review_score, address) FROM stdin;
-755	descriptionnnn	firstname	asdasdsda	$2b$10$FKEeFnI1rC6cwkaLD2ncJO1CvEX/58WKfUqNIfrW5fxhiOWE4h3NO	cuidador755	1	2023-06-03 12:53:35.977	2023-06-24 18:14:50.48	t	\N	\N	Avenida 9 de Julio 5, Buenos Aires, Argentina
-31	qweeqw	123	123	\N	adsasd	0	2023-04-09 18:04:41.672	2023-05-11 15:47:46.231	t	\N	\N	\N
 1	desccc	111111111111	111111111	\N	11111111111	1	2023-04-09 18:04:41.672	2023-05-11 15:47:46.231	f	45	\N	\N
 53	\N	name	lastname	$2b$10$kkKaP6YOO.P/xgn1mpUFjOXf/IXXKnZm4FuDqVC237vQCGW5R.DGW	newwwuser@hotmail.com	0	2023-06-18 23:38:16.92	\N	t	\N	\N	direcc
 48	newwdescccc	updatedAgain	lastname	$2a$10$N0IU4mQeWMBBx0JacWifdOgSXsiKg3AejjuaWQ4RIJ9CUbsJTPOIi	asd	1	2023-04-09 18:04:41.672	2023-06-02 14:30:02.391	t	21	9.42	\N
@@ -270,6 +270,8 @@ COPY public.users (id, description, name, last_name, password, mail, type, creat
 56	asdasddesc	firstname	lastname	$2b$10$aOBLXMe1eY/B.uzSLvT1wOrHtc8lWz9/e2iC9XBbJhjUPB/0DlK3e	testing_create2	0	2023-07-01 20:25:56.981	\N	t	\N	\N	\N
 50	descriptionnnn	50updatedat20.05	asdasdsda	$2b$10$FKEeFnI1rC6cwkaLD2ncJO1CvEX/58WKfUqNIfrW5fxhiOWE4h3NO	client	0	2023-06-03 12:53:35.977	2023-07-01 20:09:01.517	t	\N	\N	\N
 51	descccccc	firstname	lastname	$2b$10$1SBtjnQPPuCXZIyuUErEMOctccTOXxl0lQzfUuBe5XYlTkATfPMpG	cuidador	1	2023-04-09 18:04:41.672	\N	t	55	9.51	\N
+755	descriptionnnn	firstname	Actualizado11-07-dos	$2b$10$FKEeFnI1rC6cwkaLD2ncJO1CvEX/58WKfUqNIfrW5fxhiOWE4h3NO	cuidador755	1	2023-06-03 12:53:35.977	2023-07-11 16:51:36.457	t	\N	\N	Avenida 9 de Julio 5, Buenos Aires, Argentina
+31	qweeqw	123	actualizando1107	\N	adsasd	0	2023-04-09 18:04:41.672	2023-07-11 16:51:57.297	t	\N	\N	Av. Rivadavia 5170, C1424CET CABA, Argentina
 \.
 
 
@@ -277,7 +279,7 @@ COPY public.users (id, description, name, last_name, password, mail, type, creat
 -- Name: id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.id', 7, true);
+SELECT pg_catalog.setval('public.id', 9, true);
 
 
 --
