@@ -12,6 +12,7 @@ import VerDisponibilidad from './VerDisponibilidad';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
+import Paginate from './Paginate';
 
 const VerSedes = () => {
 
@@ -36,8 +37,22 @@ const VerSedes = () => {
 		fantastico: false
 	});
 	const [sedes, setSedes] = useState([]);
+	const [displayedSedes, setDisplayedSedes] = useState([]);
 	const [showDisponibilidadModal, setShowDisponibilidadModal] = useState(false);
-    
+	
+
+	// -- Pagination
+	const [currentPage, setCurrentPage] = useState(1);
+	const [postsPerPage] = useState(3);
+
+	const indexOfLastPost = currentPage * postsPerPage;
+	const indexOfFirstPost = indexOfLastPost - postsPerPage;
+	const currentPosts = displayedSedes.slice(indexOfFirstPost, indexOfLastPost);
+
+    const paginate = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
+
 	const handleCheckboxReviewsChange = (event) => {
 		const { name, checked } = event.target;
 		setCheckboxesReviews(prevState => ({
@@ -82,6 +97,7 @@ const VerSedes = () => {
             const jsonData = await response.json();
 
             setSedes(jsonData);
+            setDisplayedSedes(jsonData);
 
         } catch (error) {
             console.error(error.message);
@@ -116,7 +132,14 @@ const VerSedes = () => {
 				}
 				{ sedes.length > 0 && (
 					<div className='flex flex-col space-y-4 mx-auto items-center rounded-md justify-start w-9/12 py-2 my-5 mb-28'>
-						{sedes.length > 0 && sedes.map(sede => (
+						<Paginate
+							postsPerPage={postsPerPage}
+							totalPosts={displayedSedes.length}
+							paginate={paginate}
+							currentPage={currentPage}
+							setCurrentPage={setCurrentPage}
+						/>
+						{currentPosts.length > 0 && currentPosts.map(sede => (
 							<div 
 								className='bg-yellow-500 border border-gray-500 p-4 w-full rounded-md text-white font-semibold shadow-gray-400 shadow-lg'
 								key={sede.id}

@@ -35,15 +35,6 @@ const SedesAdmin = () => {
 	const { isAuthenticated, userId } = useContext(AuthContext);
     const [sedes, setSedes] = useState([]);
     const [displayedSedes, setDisplayedSedes] = useState([]);
-    const [searchButtonClicked, setSearchButtonClicked] = useState(false);
-    const [dateFilter, setDateFilter] = useState('newest');
-    const [statusFilter, setStatusFilter] = useState('all');
-    const [updateStatusFilter, setUpdateStatusFilter] = useState('all');
-    const [updateStatusSearch, setUpdateStatusSearch] = useState('all');
-    const [userEmail, setUserEmail] = useState('');
-    const [statusSearch, setStatusSearch] = useState('all');
-    const [caregiverEmail, setCaregiverEmail] = useState('');
-    const [noContractsWithThatStatusMessage, setNoContractsWithThatStatusMessage] = useState('');
 	const [selectedDatesInterval, setSelectedDatesInterval] = useState({});
     const [user, setUser] = useState([]);
 	const [showEditModal, setShowEditModal] = useState(false);
@@ -191,17 +182,6 @@ const SedesAdmin = () => {
 							currentPage={currentPage}
 							setCurrentPage={setCurrentPage}
 						/>
-						{currentPosts.length < 1 && noContractsWithThatStatusMessage !== '' && (
-							<div className='flex flex-row mx-5'>
-								<p className='text-md font-normal text-center'>No se han encontrado contratos en estado <span className='font-bold'>{noContractsWithThatStatusMessage}!</span></p>
-							</div>
-						)}
-
-						{currentPosts.length < 1 && noContractsWithThatStatusMessage === '' && (
-							<div className='flex flex-row w-full justify-center'>
-								<p className='text-md font-normal text-center'>No se han encontrado contratos!</p>
-							</div>
-						)}
 						{currentPosts.length > 0 && (
 							currentPosts.map(sede => (
 								<>

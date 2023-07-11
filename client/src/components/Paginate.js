@@ -57,7 +57,7 @@ const Paginate = ({ postsPerPage, totalPosts, paginate, currentPage, setCurrentP
         <Fragment>
             { amountOfPages > 1 && (
                 <div className="pagination-container">
-                    <ul className="pagination flex flex-row justify-evenly items-center my-3">
+                    <ul className="pagination flex flex-row justify-evenly items-center my-3 w-full">
                         <FontAwesomeIcon
 							className={`${currentPage === 1 ? 'absolute left-5 text-lg opacity-25' : 'absolute left-5 text-lg'}`}
 							icon={faChevronLeft}
@@ -77,7 +77,7 @@ const Paginate = ({ postsPerPage, totalPosts, paginate, currentPage, setCurrentP
                                 </>
                             )}
                         </div>
-                        <div className='flex flex-row justify-evenly w-2/4'>
+                        <div className='flex flex-row gap-4 justify-evenly w-2/4'>
                             {pageNumbers.map((number) => (
                                 <li
                                 key={number}
