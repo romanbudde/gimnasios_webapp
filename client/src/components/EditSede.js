@@ -92,7 +92,9 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 			// bodyJSON.enabled = user.enabled;
 			// console.log('userType: ', user.type);
 			// console.log('enabled: ', user.enabled);
+			bodyJSON.horarios = { horarios: horarios };
 			console.log('bodyJSON: ', bodyJSON);
+			console.log('----------------- AT SUBMIT, Horarios: ', horarios)
             const id = sede.id;
             const sedeUpdate = await fetch(
                 `http://localhost:5000/sedes/${sede.id}`,
@@ -165,7 +167,6 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 		{ value: '21:00', label: '21:00' },
 		{ value: '22:00', label: '22:00' },
 		{ value: '23:00', label: '23:00' },
-		{ value: '00:00', label: '00:00' },
 	];
 
 	// console.log('options unfiltered: ', optionsUnfiltered)

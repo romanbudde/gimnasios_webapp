@@ -11,6 +11,7 @@ import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
+import FechasHorarios from './FechasHorarios';
 
 const AddSede = ( {sedes, setSedes, show, onClose, displayedSedes, setDisplayedSedes} ) => {
 	const { isAuthenticated } = useContext(AuthContext);
