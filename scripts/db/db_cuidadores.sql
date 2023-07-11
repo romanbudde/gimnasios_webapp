@@ -16,22 +16,36 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+CREATE DATABASE db_cuidadores;
+\connect db_cuidadores;
+
+--
+-- Name: id; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.id
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.id OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
-CREATE DATABASE db_cuidadores;
-\connect db_cuidadores;
 
 --
 -- Name: sede; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.sede (
-    id integer NOT NULL,
+    id integer DEFAULT nextval('public.id'::regclass) NOT NULL,
     address character varying NOT NULL,
     max_cupo integer NOT NULL,
-    horarios json NOT NULL,
+    horarios json,
     name character varying NOT NULL
 );
 
@@ -177,13 +191,6 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: sede id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.sede ALTER COLUMN id SET DEFAULT nextval('public.sede_id_seq'::regclass);
-
-
---
 -- Name: sede_reservations id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -209,10 +216,12 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
-2	Av. San Martín 2595, A4400 Salta, Argentina	512	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	asd minuscula
-3	Av. San Martín 4544, A4400 Salta, Argentina	888	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede oeste
-4	Av. San Martín 2595, A4400 Salta, Argentina	999	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	Amici sede funes
-1	Av. San Martín 1575, A4400 Salta, Argentina	123	"['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00']"\r\n	ASD mayuscula
+1	Av. San Martín 1575, A4400 Salta, Argentina	123	{}	ASD mayuscula
+4	Av. San Martín 2595, A4400 Salta, Argentina	456	{}	Amici sede funes
+7	Av. Pres. Perón 3883, El Palomar, Provincia de Buenos Aires, Argentina	25	{}	New sede 2
+6	Pergamino 3751, C1437 CABA, Argentina	15	{}	NEW sedeee
+3	Av. San Martín 4544, A4400 Salta, Argentina	888	{}	Amici sede oeste
+2	Av. San Martín 2595, A4400 Salta, Argentina	512	{}	asd minuscula
 \.
 
 
@@ -265,10 +274,17 @@ COPY public.users (id, description, name, last_name, password, mail, type, creat
 
 
 --
+-- Name: id; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.id', 7, true);
+
+
+--
 -- Name: sede_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sede_id_seq', 1, true);
+SELECT pg_catalog.setval('public.sede_id_seq', 3, true);
 
 
 --

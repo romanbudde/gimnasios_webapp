@@ -1,8 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import AddUser from './AddUser';
+import AddSede from './AddSede';
 import User from './User';
 import EditUser from './EditUser';
 import EditSede from './EditSede';
+
+import * as Yup from 'yup';
+import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+import Autocomplete from "react-google-autocomplete";
 
 import { json, useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
@@ -42,6 +47,7 @@ const SedesAdmin = () => {
 	const [selectedDatesInterval, setSelectedDatesInterval] = useState({});
     const [user, setUser] = useState([]);
 	const [showEditModal, setShowEditModal] = useState(false);
+	const [showAddSedeModal, setShowAddSedeModal] = useState(false);
 	
 	// -- Pagination
 	const [currentPage, setCurrentPage] = useState(1);
@@ -52,6 +58,13 @@ const SedesAdmin = () => {
 	const currentPosts = displayedSedes.slice(indexOfFirstPost, indexOfLastPost);
 
 	// console.log('currentPosts: ', currentPosts);
+
+	const handleAddSedeModalOpen = () => {
+        setShowAddSedeModal(true);
+    }
+    const handleAddSedeModalClose = () => {
+        setShowAddSedeModal(false); 
+    }
 
 	const handleShow = () => setShowEditModal(true);
 
@@ -102,7 +115,7 @@ const SedesAdmin = () => {
 	console.log('selected dates interval: ', selectedDatesInterval);
 
     const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/cuidadores/" + userId);
+		const response = await fetch("http://localhost:5000/users/" + userId);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');
@@ -147,6 +160,29 @@ const SedesAdmin = () => {
 						<h1 className='flex justify-center font-bold text-lg py-4'>Sedes</h1>
 					</div>
 					<div className='mb-28'>
+
+						<div className='flex flex-row justify-center w-full'>
+							<button
+								className='bg-transparent text-green-500 font-semibold py-2 px-4 border border-green-600 rounded-lg w-2/3 my-5'
+								onClick={handleAddSedeModalOpen}
+							>
+								Crear usuario
+							</button>
+							{/* <button
+								className='text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-2/3 py-2.5 text-center shadow-lg'
+								onClick = {searchUsers}
+							>
+								Buscar usuarios
+							</button> */}
+						</div>
+						<AddSede
+							sedes={sedes}
+							setSedes={setSedes}
+							displayedSedes={displayedSedes}
+							setDisplayedSedes={setDisplayedSedes}
+							show={showAddSedeModal}
+							onClose={handleAddSedeModalClose}
+						/>
 						
 						<Paginate
 							postsPerPage={postsPerPage}

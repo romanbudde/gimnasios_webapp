@@ -13,8 +13,8 @@ import '../css/autocomplete.css';
 
 const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, show, onClose }) => {
 
-	console.log('sede passed: ', sede);
-	console.log('--------------- displayed users passed: ', displayedSedes);
+	// console.log('sede passed: ', sede);
+	// console.log('--------------- displayed users passed: ', displayedSedes);
 
     const [description, setDescription] = useState('');
     const [address, setAddress] = useState('');
@@ -24,9 +24,22 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
     const [hourlyRate, setHourlyRate] = useState('');
 	const [editDataMessageError, setEditDataMessageError] = useState(false);
 	const [displayEditDataMessage, setDisplayEditDataMessage] = useState(false);
+    const [horarios, setHorarios] = useState([]);
+	const [checkedHorarios, setCheckedHorarios] = useState([]);
     // const [userType, setUserType] = useState('');
 	const navigate = useNavigate();
 	const cookies = new Cookies();
+
+	const handleCheckboxChange = (horario) => {
+        console.log('clicked an horario: ', horario);
+        if (checkedHorarios.includes(horario)) {
+			setCheckedHorarios(checkedHorarios.filter((item) => item !== horario).sort());
+			setHorarios(checkedHorarios.filter((item) => item !== horario).sort());
+        } else {
+			setCheckedHorarios([...checkedHorarios, horario].sort());
+			setHorarios([...checkedHorarios, horario].sort());
+        }
+    };
 
 	const closeEditDataMessage = () => {
         setDisplayEditDataMessage(false);
@@ -43,9 +56,12 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 			.required('Campo requerido!'),
 		address: Yup.string()
 			.min(4, 'Dirección demasiado corta!')
-			.max(100, 'La dirección es demasiado larga')
+			.max(100, 'La dirección es demasiado larga.')
 			.matches(/^.*\b\w+\b.*\d.*,.*/, 'La dirección no posee altura de la calle.')
 			.required('Campo requerido!'),
+		horarios: Yup.array()
+			.max(24, 'Horarios demasiado largos')
+			.required('Elija al menos un horario.'),
 	});
 
 	useEffect(() => {
@@ -97,6 +113,7 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
                 address: address,
                 name: name,
                 cupo: cupo,
+				horarios: horarios,
                 id: id
             }
 
@@ -123,6 +140,38 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
         }
     };
 
+	const optionsUnfiltered = [
+		{ value: '00:00', label: '00:00' },
+		{ value: '01:00', label: '01:00' },
+		{ value: '02:00', label: '02:00' },
+		{ value: '03:00', label: '03:00' },
+		{ value: '04:00', label: '04:00' },
+		{ value: '05:00', label: '05:00' },
+		{ value: '06:00', label: '06:00' },
+		{ value: '07:00', label: '07:00' },
+		{ value: '08:00', label: '08:00' },
+		{ value: '09:00', label: '09:00' },
+		{ value: '10:00', label: '10:00' },
+		{ value: '11:00', label: '11:00' },
+		{ value: '12:00', label: '12:00' },
+		{ value: '13:00', label: '13:00' },
+		{ value: '14:00', label: '14:00' },
+		{ value: '15:00', label: '15:00' },
+		{ value: '16:00', label: '16:00' },
+		{ value: '17:00', label: '17:00' },
+		{ value: '18:00', label: '18:00' },
+		{ value: '19:00', label: '19:00' },
+		{ value: '20:00', label: '20:00' },
+		{ value: '21:00', label: '21:00' },
+		{ value: '22:00', label: '22:00' },
+		{ value: '23:00', label: '23:00' },
+		{ value: '00:00', label: '00:00' },
+	];
+
+	// console.log('options unfiltered: ', optionsUnfiltered)
+	console.log('--------- horarios: ', horarios)
+	console.log('--------- checked horarios: ', checkedHorarios)
+
     return (
         <Fragment>
 			<Formik
@@ -131,7 +180,8 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 					id: id,
 					address: address,
 					name: name,
-					cupo: cupo
+					cupo: cupo,
+					horarios: horarios
 				}}
 				validationSchema={UpdateSchema}
 				// onSubmit={onSubmitUser}
@@ -196,6 +246,43 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 												{errors.cupo}
 											</div>
 										) : null}
+								</div>
+
+								<div className='flex flex-col py-2'>
+									<label className="block mb-2 mr-auto text-sm font-medium text-gray-900 dark:text-white">
+										Horarios
+									</label>
+									<Field value={horarios} name="horarios" placeholder="ej: 09:00, 10:00, 11:00, 12:00" className={`${errors.horarios && touched.horarios ?  'bg-gray-50 border text-red-500 placeholder-red-500 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-solid border-opacity-100 focus:outline-none focus:outline-0 border-red-500' : 
+									'bg-gray-50 border text-gray-900 text-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'}`}/>
+										{errors.horarios && touched.horarios ? (
+											<div className='text-red-500 font-normal w-full text-sm text-left'>
+												{errors.horarios}
+											</div>
+										) : null}
+									<ul className="text-black flex flex-col w-full rounded-md max-h-44 overflow-scroll">
+										{ optionsUnfiltered.map((horario, index) => (
+											<li className='flex flex-row items-center p-7 gap-2 relative' key={index}>
+												<label htmlFor={horario.value} className='w-full flex items-center cursor-pointer'>
+													<span className={`absolute p-5 text-md inset-0 transition ${checkedHorarios.includes(horario.value) ? 'bg-green-400' : 'bg-gray-300'}`}>
+														{horario.value}
+													</span>
+													<input
+														type='checkbox'
+														className='hidden'
+														value={horario.value}
+														name={horario.value}
+														id={horario.value}
+														// onClick={ (e) => console.log('clicked an horario: ', horario.value)}
+														onChange={() => handleCheckboxChange(horario.value)}
+													/>
+												</label>
+											</li>
+										
+										))}
+									</ul>
+									{/* <Horarios
+										s
+									/> */}
 								</div>
 								
 								<div className='flex flex-col py-1'>

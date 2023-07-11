@@ -144,7 +144,7 @@ const VerDisponibilidad = ({ cuidador, show, onClose }) => {
         } else {
           setCheckedHorarios([...checkedHorarios, horario]);
         }
-      };
+    };
     
 
     const onChange = (selectedDate) => {

@@ -30,7 +30,7 @@ const SedeItem = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes }) 
                 key={sede.id}
             >
                 <p>Sede: {sede.name}</p>
-                <p>Horarios: {sede.horarios}</p>
+                {/* <p>Horarios: {sede.horarios ? sede.horarios : ''}</p> */}
                 <p>Cupo: {sede.max_cupo}</p>
                 <p>Dirección: {sede.address}</p>
                 <div
