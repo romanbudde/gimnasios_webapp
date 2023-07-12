@@ -294,22 +294,116 @@ app.get("/sedes", async(req, res) => {
     }
 });
 
-// get a contract by user id
+// get (by id) individual user
+app.get("/users/:id", async(req, res) => {
+    try {
+        const {id} = req.params;
+        const user = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+
+        res.json(user.rows[0]);
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+});
+
+// get a reservation by user id or sede_id
 app.get("/reservas", async(req, res) => {
     try {
-        const { user_id } = req.query;
+        const { user_id, sede_id } = req.query;
 
         let reservas;
 
-        console.log('---------------------- user_id is: ', user_id)
+        if (user_id && sede_id) {
+            // Both user_id and sede_id are provided
+            reservas = await pool.query(
+                "SELECT * from sede_reservations WHERE user_id = $1 AND sede_id = $2",
+                [user_id, sede_id]
+            );
+        } else if (user_id) {
+            // Only user_id is provided
+            reservas = await pool.query(
+                "SELECT * from sede_reservations WHERE user_id = $1",
+                [user_id]
+            );
+        } else if (sede_id) {
+            // Only sede_id is provided
+            reservas = await pool.query(
+                "SELECT * from sede_reservations WHERE sede_id = $1",
+                [sede_id]
+            );
+        } else {
+            res.status(400).json({"message": "Error: ni user_id ni sede_id fueron especificados."});
+        }
 
-        reservas = await pool.query("SELECT * from sede_reservations WHERE user_id = $1", [user_id]);
-
-        console.log('reservas: ', reservas);
+        console.log('reservas: ', reservas.rows);
         res.json(reservas.rows);
     }
     catch (error) {
         console.error(error.message);
+    }
+});
+
+// get a reservation by user id or sede_id
+app.post("/reservas", async(req, res) => {
+    try {
+        const { user_id, sede_id, horario, date} = req.body;
+        console.log('user_id: ', user_id);
+        console.log('sede_id: ', sede_id);
+        console.log('horario: ', horario);
+        console.log('date: ', date);
+
+        // chequear que los cupos de la sede, para esa hora (y en el dia de hoy) no esten todos cubiertos.
+        // get cupos sede
+        const sede = await pool.query(
+            "SELECT * from sede WHERE id = $1",
+            [sede_id]
+        );
+
+        const sede_data = sede.rows[0];
+        
+        // get reservations para la sede, contarlas y que sea menor al max_cupo de la sede.
+        const reservas = await pool.query(
+            "SELECT * from sede_reservations WHERE sede_id = $1",
+            [sede_id]
+        );
+
+        console.log('reservas: ', reservas.rows)
+
+        let reservas_counter = 0;
+        reservas.rows.forEach(reserva => {
+            console.log('------------- reserva.horario: ', reserva.horario);
+            console.log('------------- horario: ', horario);
+            console.log('------------- reserva.date: ', reserva.date);
+            console.log('------------- date: ', date);
+            if (reserva.horario === horario && reserva.date === date){
+                reservas_counter++;
+            }
+        });
+
+        console.log('------- reservas counter: ', reservas_counter);
+        console.log('------- sede_data.max_cupo: ', sede_data.max_cupo);
+
+        if (reservas_counter < sede_data.max_cupo){
+            // crear reserva
+            console.log('crear reserva!');
+            const newReserva = await pool.query(
+                "INSERT INTO sede_reservations (user_id, sede_id, horario, date) VALUES($1, $2, $3, $4) RETURNING *", 
+                [user_id, sede_id, horario, date]
+            );
+            
+            console.log('newReserva: ', newReserva.rows[0])
+            
+            res.status(200).json(newReserva.rows[0]);
+        }
+        else {
+            console.log('ERROR!');
+            res.status(400).json({"error": "Error: limite de cupos excedido."});
+        }
+            
+    }
+    catch(error){
+        console.log(error);
     }
 });
 
@@ -1103,19 +1197,6 @@ app.get("/caregiver_get_available_dates", async (req, res) => {
 		res.json({
 			"availabilities": availabilities.rows[0]
 		});
-    }
-    catch (error) {
-        console.error(error.message);
-    }
-});
-
-// get (by id) individual - cuidador
-app.get("/users/:id", async(req, res) => {
-    try {
-        const {id} = req.params;
-        const user = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-
-        res.json(user.rows[0]);
     }
     catch (error) {
         console.error(error.message);

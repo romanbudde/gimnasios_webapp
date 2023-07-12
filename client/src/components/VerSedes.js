@@ -151,7 +151,7 @@ const VerSedes = () => {
 									className='w-full text-white bg-gradient-to-r from-yellow-700 to-yellow-800 focus:ring-4 focus:outline-none rounded-lg text-sm px-5 py-2.5 mt-2 text-center font-semibold'
 									onClick={handleShowDisponibilidadModal(sede)}
 								>
-									Reservar turno
+									Ver turnos
 								</button>
 								<VerDisponibilidad
 									sede={sede}
