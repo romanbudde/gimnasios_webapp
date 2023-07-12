@@ -17,14 +17,19 @@ const Account = () => {
 
 	const [user, setUser] = useState('');
 	const [userTypes, setUserTypes] = useState([]);
-
 	const [showEditModal, setShowEditModal] = useState(false);
+	const [image, setImage] = useState();
     
     const handleShow = () => setShowEditModal(true);
     const handleClose = () => {
         console.log('----------- HANDLE CLOSE() -----------')
         setShowEditModal(false);
     }
+
+	const handleUpload = () => {
+		// Perform upload logic here using selectedFile
+		console.log(image);
+	};
     
 	const navigate = useNavigate();
 	const cookies = new Cookies();
@@ -102,6 +107,11 @@ const Account = () => {
 					)}
 					<div className='w-full flex flex-col items-center px-5 space-y-3'>
 						<h1>Hola, {user.name}!</h1>
+						<div className='p-20 bg-black rounded-full'>
+							Profile pic
+						</div>
+						<input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+						<button onClick={handleUpload}>Upload</button>
 						<button 
 							className='w-full text-white bg-gradient-to-r from-green-500 to-green-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
 							onClick={handleShow}

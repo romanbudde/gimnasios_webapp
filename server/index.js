@@ -7,10 +7,10 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const mercadopago = require('mercadopago');
-const ngrok = require('ngrok');
+const fileUpload = require('express-fileupload');
 
 // const { ngrok_url } = require('./new-dev-im-testing.js')
-const ngrok_url = process.env.NGROK_URL;
+// const ngrok_url = process.env.NGROK_URL;
 const localtunnel_url = process.env.LOCALTUNNEL_URL;
 
 require('dotenv').config();
@@ -529,6 +529,7 @@ app.get("/users_filtered", async(req, res) => {
     }
 });
 
+app.post('/upload', )
 
 
 
