@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import UserEditData from './UserEditData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
 import CuidadorBottomBar from './CuidadorBottomBar';
 
@@ -18,18 +18,51 @@ const Account = () => {
 	const [user, setUser] = useState('');
 	const [userTypes, setUserTypes] = useState([]);
 	const [showEditModal, setShowEditModal] = useState(false);
-	const [image, setImage] = useState();
+	const [image, setImage] = useState({ preview: '', data: '' });
+	const [imageUploadError, setImageUploadError] = useState(false);
+	const [imageUploadSuccess, setImageUploadSuccess] = useState(false);
+	const [imageUploadMessage, setImageUploadMessage] = useState('');
+	const [status, setStatus] = useState('');
+
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		let formData = new FormData()
+		formData.append('file', image.data)
+		formData.append('user_id', userId)
+		const response = await fetch('http://localhost:5000/upload_image', {
+		  method: 'POST',
+		  body: formData,
+		}).then(response => response.json())
+		.then(result => {
+			if (!result.error){
+				console.log('------- no hay error al subir la imagen');
+				setStatus(result.statusText);
+				setImageUploadError(false);
+				setImageUploadSuccess(true);
+				setImageUploadMessage('Foto de perfil actualizada!');
+			}
+			else {
+				console.log('------- hubo un error al subir la imagen');
+				setImageUploadSuccess(false);
+				setImageUploadError(true);
+				setImageUploadMessage(result.error);
+			}
+		})
+	}
+	
+	const handleFileChange = (e) => {
+		const img = {
+		  preview: URL.createObjectURL(e.target.files[0]),
+		  data: e.target.files[0],
+		}
+		setImage(img)
+	}
     
     const handleShow = () => setShowEditModal(true);
     const handleClose = () => {
         console.log('----------- HANDLE CLOSE() -----------')
         setShowEditModal(false);
     }
-
-	const handleUpload = () => {
-		// Perform upload logic here using selectedFile
-		console.log(image);
-	};
     
 	const navigate = useNavigate();
 	const cookies = new Cookies();
@@ -57,7 +90,7 @@ const Account = () => {
 	}
 
 	const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/cuidadores/" + userId);
+		const response = await fetch("http://localhost:5000/users/" + userId);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');
@@ -87,6 +120,8 @@ const Account = () => {
 		getUserTypes();
     }, []);
 
+	console.log('image.preview: ', image.preview)
+
 	if(isAuthenticated){
 		return (
 			<Fragment>
@@ -98,6 +133,7 @@ const Account = () => {
 							onClick={ redirectLanding }
 						/>
 						<h1 className='flex justify-center font-bold text-lg py-4'>Mi perfil</h1>
+						<FontAwesomeIcon icon={faPenToSquare} className='text-2xl absolute right-5' onClick={handleShow} />
 					</div>
 					{ user.type === 1 && (
 						<CuidadorBottomBar/>
@@ -106,18 +142,33 @@ const Account = () => {
 						<ClientBottomBar/>
 					)}
 					<div className='w-full flex flex-col items-center px-5 space-y-3'>
-						<h1>Hola, {user.name}!</h1>
-						<div className='p-20 bg-black rounded-full'>
-							Profile pic
-						</div>
-						<input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-						<button onClick={handleUpload}>Upload</button>
-						<button 
-							className='w-full text-white bg-gradient-to-r from-green-500 to-green-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-							onClick={handleShow}
-						>
-							Editar datos
-						</button>
+						<h1 className='font-medium text-lg'>Hola, {user.name}!</h1>
+
+						<form onSubmit={handleSubmit} className='flex flex-col gap-3 items-center justify-center'>
+							<div className='relative'>
+								<input type='file' name='file' id='file' onChange={handleFileChange} className='z-50 absolute opacity-0 focus:outline-none w-full h-full'></input>
+								{image.preview ? (
+									<img src={image.preview} className='rounded-full border-2 border-gray-200' width='125' height='100' />
+								) : (
+									user.profile_picture_url !== '' ? (
+										<img src={`http://localhost:5000/${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+									) : (
+										<img src={`http://localhost:5000/no_picture.jpg`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+									)
+								)}
+								<FontAwesomeIcon icon={faCirclePlus} className='absolute right-2 bottom-1 text-3xl bg-white rounded-full'/>
+							</div>
+							{ image.preview && (
+								<button className='bg-gray-800 text-white py-3 px-10 font-medium text-sm' type='submit'>Guardar mi foto</button>
+							)}
+						</form>
+						{imageUploadError && (
+							<p className='text-center text-red-600 font-medium'>{imageUploadMessage}</p>
+						)}
+						{imageUploadSuccess && (
+							<p className='text-center text-green-500 font-medium'>{imageUploadMessage}</p>
+						)}
+						
 						<UserEditData
 							user={user}
 							setUser={setUser}

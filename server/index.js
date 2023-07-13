@@ -6,12 +6,8 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const mercadopago = require('mercadopago');
-const fileUpload = require('express-fileupload');
-
-// const { ngrok_url } = require('./new-dev-im-testing.js')
-// const ngrok_url = process.env.NGROK_URL;
-const localtunnel_url = process.env.LOCALTUNNEL_URL;
+const multer = require('multer');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -23,9 +19,7 @@ const LocalStrategy = require('passport-local');
 
 const flash = require('express-flash');
 const session = require('express-session');
-const { lt_url } = require('./new-dev-localtunnel');
 
-const MERCADOPAGO_TEST_TOKEN = process.env.MERCADOPAGO_TEST_TOKEN; 
 const port = process.env.PORT; 
 const ngrok_auth_token = process.env.NGROK_TOKEN; 
 
@@ -38,6 +32,8 @@ app.use(express.json());
 app.use(flash())
 
 app.use(bodyParser.json());
+
+app.use(express.static('public'));
 
 // initialize PassportJS and enable session support
 app.use(session({
@@ -53,6 +49,22 @@ app.use(router);
 app.use(cors({
     origin: "http://localhost:3000"
 }))
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/')
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname)
+    },
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // Maximum file size of 5MB
+    }
+});
 
 passport.use(new LocalStrategy(
 	{usernameField:"email", passwordField:"password"},
@@ -104,23 +116,6 @@ passport.deserializeUser(async function(id, done) {
         done (err)
     }
 });
-
-// Initialize ngrok (for mercadopago's webhook, which requires a https url, meaning it can't be localhost)
-
-// (async function() {
-//     const url = await ngrok.connect({ authtoken: ngrok_auth_token });
-//     const api = ngrok.getApi();
-    
-//     const tunnels = await api.listTunnels();
-//     console.log('At index.js, tunnels: ', tunnels);
-
-//     global.ngrok_url = ngrok_url;
-//     console.log('At index.js, ngrok url: ', ngrok_url);
-// })();
-
-console.log('At index.js, NGROK_URL is: ', ngrok_url);
-console.log('At index.js, LT_URL is: ', localtunnel_url);
-
 
 // Routes
 
@@ -529,7 +524,28 @@ app.get("/users_filtered", async(req, res) => {
     }
 });
 
-app.post('/upload', )
+app.post('/upload_image', upload.single('file'), async (req, res) => {
+    console.log('at upload image functionality.');
+
+    if (req.file.size > 5 * 1024 * 1024) {
+        console.log('El tamaño de la imagen supera el límite permitido.');
+        return res.status(400).json({ error: 'El tamaño de la imagen supera el límite permitido' });
+    }
+
+    // update user's profile_picture_url value.
+    const user_id = req.body.user_id;
+    const file_name = req.file.filename;
+    console.log('user_id is: ', user_id);
+    console.log('req.file is: ', req.file);
+    console.log('req.file.filename is: ', req.file.filename);
+    console.log('req.file.path is: ', req.file.path);
+    const updateUser = await pool.query(
+        "UPDATE users SET profile_picture_url = $1 WHERE id = $2 RETURNING *", 
+        [file_name, user_id]
+    );
+    
+    res.json({})
+});
 
 
 
@@ -834,160 +850,6 @@ app.put("/contract/:id", async(req, res) => {
 //         console.log('error: ', error);
 //     }
 // });
-
-// listening for mercadopagos webhook
-app.post("/webhook", async (req, res) => {
-    console.log('----------------------------------------------------------------------------------------------------------------')
-    console.log('----------------------------------------------------------------------------------------------------------------')
-    console.log('----------------------------------------------------------------------------------------------------------------')
-    console.log('----------------------------------------------------------------------------------------------------------------')
-    console.log('at /webhook start.')
-    
-    const payment = req.query;
-    console.log(req.query);
-
-    if (payment.type === "payment") {
-
-        const data = await mercadopago.payment.findById(payment["data.id"]);
-        console.log('payment[data.id]: ', data);
-        // I can store in the DB whatever data in need from this payment data.
-        const payment_data = data.body;
-        const contract = await pool.query('SELECT * FROM contract WHERE id = $1', [ payment_data.external_reference ]);
-        const contract_data = contract.rows[0];
-
-        if(payment_data.status === 'approved'){
-            console.log('El pago ha sido aprobado con exito!');
-
-            // set contract status to active
-            const update_contract_status = await pool.query(
-                "UPDATE contract SET status = $1 WHERE id = $2 RETURNING *", 
-                ['active', payment_data.external_reference]
-            );
-
-            // Remove availabilities from caregiver_availability table
-            const previousAvailabilities = await pool.query("SELECT * FROM caregiver_availability WHERE caregiver_id = $1", [contract_data.caregiver_id]);
-    
-            console.log('caregiver availabilities for date: ', contract_data.date);
-            console.log(previousAvailabilities.rows[0].dates[contract_data.date]);
-
-            if(previousAvailabilities.rows[0].dates[contract_data.date].length > 0) {
-                let allAvailabilities = previousAvailabilities.rows[0].dates;
-                let availabilitiesForDate = previousAvailabilities.rows[0].dates[contract_data.date];
-                let filteredAvailabilities = availabilitiesForDate.filter(time => !contract_data.horarios.includes(time));
-
-                console.log('filteredAvailabilities: ');
-                console.log(filteredAvailabilities);
-                allAvailabilities[contract_data.date] = filteredAvailabilities;
-
-                console.log('allAvailabilities entero y updateado: ');
-                console.log(allAvailabilities);
-
-                const newAvailabilities = await pool.query("UPDATE caregiver_availability SET dates = $1 WHERE caregiver_id = $2 RETURNING *", [allAvailabilities, contract_data.caregiver_id]);
-            } else {
-                // return error because times for that date are NOT available.
-                return res.status(401).json({ error: 'Error: alguno de los horarios no esta disponible para la fecha elegida.' });
-            }
-        }
-        if(payment_data.status === 'rejected'){
-            console.log('El pago ha sido rechazado por algun motivo.');
-
-            // set contract status to cancelled
-            const update_contract_status = await pool.query(
-                "UPDATE contract SET status = $1 WHERE id = $2 RETURNING *", 
-                ['cancelled', payment_data.external_reference]
-            );
-            
-            // si el pago es rechazado, tengo que liberar las horas del caregiver.
-
-            // get contract by payment_data.external_reference.
-            
-            console.log('--------------- contract_data corresponding to the payment: ', contract_data);
-            
-            
-            // basing off of the fetched contract's date and time, add it back to caregiver availability
-            //     const previousAvailabilities = await pool.query("SELECT * FROM caregiver_availability WHERE caregiver_id = $1", [contract_data.caregiver_id]);
-            //     console.log('------------ horarios VIEJOS para el dia del contrato: ',  previousAvailabilities.rows[0].dates[contract_data.date]);
-                
-            //     // add the times to the end of the array, then sort the entire array (it sorts it cronologically).
-            //     let allAvailabilities = previousAvailabilities.rows[0].dates;
-            //     let availabilitiesForDate = previousAvailabilities.rows[0].dates[contract_data.date];
-            //     availabilitiesForDate = availabilitiesForDate.concat(contract_data.horarios).sort();
-            //     console.log('---- horarios del contrato: ', contract_data.horarios);
-
-            //     console.log('availabilitiesForDate (updated): ');
-            //     console.log(availabilitiesForDate);
-            //     allAvailabilities[contract_data.date] = availabilitiesForDate;
-
-            //     console.log('allAvailabilities entero y updateado: ');
-            //     console.log(allAvailabilities);
-        
-            //     // update caregiver availabilities
-            //     const newAvailabilities = await pool.query("UPDATE caregiver_availability SET dates = $1 WHERE caregiver_id = $2 RETURNING *", [allAvailabilities, contract_data.caregiver_id]);
-        
-            //     console.log('------ nuevas availabilities updateadas: ', newAvailabilities.rows[0]);
-        }
-
-        const update_contract = await pool.query(
-            "UPDATE contract SET payment_status = $1 WHERE id = $2 RETURNING *", 
-            [payment_data.status, payment_data.external_reference]
-        );
-        
-        if(update_contract.rowCount > 0){
-            res.status(200).json(update_contract.rows[0]);
-        }
-    }
-})
-
-// mercado pago initializing payment
-
-app.post("/create-contract", async(req, res) => {
-    try{
-        // console.log('ngrok url at create-contract: ', ngrok_url);
-        // const ngrok_url = await ngrok.connect({
-        //     proto: 'http',
-        //     addr: port
-        // });
-        console.log('ngrok url at create-contract endpoint asd: ', ngrok_url);
-        console.log('ngrok url at create-contract endpoint + /webhook: ', ngrok_url + '/webhook');
-        console.log('localtunnel url at create-contract endpoint asd: ', localtunnel_url);
-        console.log('localtunnel url at create-contract endpoint + /webhook: ', localtunnel_url + '/webhook');
-
-        const { title, unit_price, quantity, external_reference } = req.body;
-
-        mercadopago.configure({
-            // cuenta testing - vendedor
-            access_token: 'APP_USR-7129350085452910-070912-90070389d55a42626319cd0f07f166e0-1414155674'
-        });
-
-    
-        const result = await mercadopago.preferences.create({
-            items: [
-                { 
-                    title: "Contrato-0001111",
-                    unit_price: unit_price,
-                    currency_id: "ARS",
-                    quantity: 1
-                },
-            ],
-            auto_return: "all",
-            external_reference: external_reference.toString(),
-            back_urls: {
-                success: "http://localhost:3000/success",
-                failure: "http://localhost:3000/failure",
-                pending: "http://localhost:3000/pending"
-            },
-            // expires: false, 
-            // external_reference: "MPNew_0002",
-            notification_url: localtunnel_url + "/webhook"
-        });
-
-        console.log('result: ', result);
-        res.status(200).json(result)
-    }
-    catch(error){
-        console.log('error: ', error);
-    }
-});
 
 // create a contract
 app.post("/contract", async(req, res) => {
