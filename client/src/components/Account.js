@@ -138,7 +138,7 @@ const Account = () => {
 					{ user.type === 1 && (
 						<CuidadorBottomBar/>
 					)}
-					{ user.type === 1 && (
+					{ user.type === 0 && (
 						<ClientBottomBar/>
 					)}
 					<div className='w-full flex flex-col items-center px-5 space-y-3'>
@@ -159,16 +159,20 @@ const Account = () => {
 								<FontAwesomeIcon icon={faCirclePlus} className='absolute right-2 bottom-1 text-3xl bg-white rounded-full'/>
 							</div>
 							{ image.preview && (
-								<button className='bg-gray-800 text-white py-3 px-10 font-medium text-sm' type='submit'>Guardar mi foto</button>
+								<button className='bg-gray-800 text-white py-3 px-10 font-medium text-sm' type='submit'>Guardar foto</button>
 							)}
 						</form>
 						{imageUploadError && (
-							<p className='text-center text-red-600 font-medium'>{imageUploadMessage}</p>
+							<div className='bg-red-500 mx-5 p-2 rounded-lg'>
+								<p className='text-center text-white font-medium'>{imageUploadMessage}</p>
+							</div>
 						)}
 						{imageUploadSuccess && (
-							<p className='text-center text-green-500 font-medium'>{imageUploadMessage}</p>
+							<div className='bg-green-500 w-full mx-5 p-2 rounded-lg'>
+								<p className='text-center text-white font-medium'>{imageUploadMessage}</p>
+							</div>
 						)}
-						
+
 						<UserEditData
 							user={user}
 							setUser={setUser}

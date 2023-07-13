@@ -268,7 +268,10 @@ const UserEditData = ({ user, setUser, show, onClose }) => {
 											console.log(e.target.value)
 										}}
 										onPlaceSelected={(place) => {
+											console.log('-------------- PLACE ----------------');
 											console.log(place);
+											console.log('latitude: ', place.geometry.location.lat());
+											console.log('longitude: ', place.geometry.location.lng());
 											console.log('formated address: ', place.formatted_address);
 											setFieldValue('address', place.formatted_address);
 										}}

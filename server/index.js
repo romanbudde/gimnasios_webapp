@@ -532,6 +532,15 @@ app.post('/upload_image', upload.single('file'), async (req, res) => {
         return res.status(400).json({ error: 'El tamaño de la imagen supera el límite permitido' });
     }
 
+    if (
+        req.file.mimetype !== 'image/jpeg' &&
+        req.file.mimetype !== 'image/png' &&
+        req.file.mimetype !== 'image/webp'
+    ) {
+        console.log('El archivo no es una imagen válida.');
+        return res.status(400).json({ error: 'La imagen está en un formato inválido (permitidos: .png, .jpg, .webp).' });
+    }
+
     // update user's profile_picture_url value.
     const user_id = req.body.user_id;
     const file_name = req.file.filename;

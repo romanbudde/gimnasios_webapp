@@ -34,7 +34,7 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
 
 	let formattedDate = date.toLocaleDateString("en-GB");
 
-    console.log('horarios disponibles: ', horariosDisponibles);
+    // console.log('horarios disponibles: ', horariosDisponibles);
     
 	// get all users function
     const getReservationsForSelectedSede = async () => {
@@ -51,10 +51,10 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
 
             let horarios_reservados = {};
             jsonData.map(reservation => {
-                console.log('reservation: ', reservation);
-                console.log('reservation.user_id: ', reservation.user_id);
-                console.log('user_id: ', userId);
-                console.log('reservation.user_id === user_id: ', reservation.user_id.toString() === userId);
+                // console.log('reservation: ', reservation);
+                // console.log('reservation.user_id: ', reservation.user_id);
+                // console.log('user_id: ', userId);
+                // console.log('reservation.user_id === user_id: ', reservation.user_id.toString() === userId);
                 if(reservation.date === today && reservation.sede_id === sede.id && reservation.user_id.toString() === userId){
                     setUserCantCreateReservaToday(true);
                     setHoraDelTurnoYaReservadoPorUsuario(reservation.horario);
@@ -86,7 +86,7 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
     
     // console.log('checkedHorario: ', checkedHorario);
     // console.log(checkedHorario);
-    console.log('horarios reservas existentes: ', horariosReservasExistentes);
+    // console.log('horarios reservas existentes: ', horariosReservasExistentes);
     
     const handleCheckboxChange = (horario) => {
         console.log('clicked an horario: ', horario);

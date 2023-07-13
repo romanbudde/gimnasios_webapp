@@ -9,8 +9,9 @@ import { AuthContext } from './AuthContext';
 import useWebSocket from 'react-use-websocket';
 
 import VerDisponibilidad from './VerDisponibilidad';
+import VerMapaSede from './VerMapaSede';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
 import Paginate from './Paginate';
 
@@ -39,6 +40,7 @@ const VerSedes = () => {
 	const [sedes, setSedes] = useState([]);
 	const [displayedSedes, setDisplayedSedes] = useState([]);
 	const [showDisponibilidadModal, setShowDisponibilidadModal] = useState(false);
+	const [showMapaSedeModal, setShowMapaSedeModal] = useState(false);
 	
 
 	// -- Pagination
@@ -79,15 +81,26 @@ const VerSedes = () => {
 
 	// const handleShowDisponibilidadModal = (cuidador) => setShowDisponibilidadModal(true);
 
-	const handleShowDisponibilidadModal = (cuidador) => () => {
-		// Use cuidador inside this function
-		console.log('Clicked on:', cuidador);
-		setShowDisponibilidadModal(cuidador);
+	const handleShowMapaSede = (sede) => () => {
+		// Use sede inside this function
+		console.log('Clicked on:', sede);
+		setShowMapaSedeModal(sede);
+	  };
+
+	const handleShowDisponibilidadModal = (sede) => () => {
+		// Use sede inside this function
+		console.log('Clicked on:', sede);
+		setShowDisponibilidadModal(sede);
 	  };
 
     const handleClose = () => {
         console.log('----------- HANDLE CLOSE() -----------')
         setShowDisponibilidadModal(false);
+    }
+
+    const handleCloseMapaSede = () => {
+        console.log('----------- HANDLE CLOSE() -----------')
+        setShowMapaSedeModal(false);
     }
 
 	 // get all users function
@@ -108,7 +121,6 @@ const VerSedes = () => {
     useEffect(() => {
         getSedes();
     }, []);
-
 
 	console.log('sedes: ', sedes)
 	// console.log(cuidadores)
@@ -141,14 +153,28 @@ const VerSedes = () => {
 						/>
 						{currentPosts.length > 0 && currentPosts.map(sede => (
 							<div 
-								className='bg-yellow-500 border border-gray-500 p-4 w-full rounded-md text-white font-semibold shadow-gray-400 shadow-lg'
+								className='bg-gray-200 border border-gray-500 p-4 w-full rounded-md text-black font-semibold shadow-gray-400 shadow-lg'
 								key={sede.id}
 							>
+								<div className='flex flex-row items-center justify-end mb-1'>
+									<div
+										className='flex flex-row items-center gap-2 p-1.5 bg-gray-300 border border-gray-600 rounded-md'
+										onClick={handleShowMapaSede(sede)}
+									>
+										<FontAwesomeIcon className='text-xl text-black' icon={faLocationDot} />
+										<p className='text-gray-800'>Ver en mapa</p>
+									</div>
+									<VerMapaSede
+										sede={sede}
+										show={showMapaSedeModal === sede}
+										onClose={handleCloseMapaSede}
+									/>
+								</div>
 								<h2>Sede: {sede.name}</h2>
 								<h2>Direccion: {sede.address}</h2>
 								<h2>Cupos por turno: {sede.max_cupo}</h2>
 								<button
-									className='w-full text-white bg-gradient-to-r from-yellow-700 to-yellow-800 focus:ring-4 focus:outline-none rounded-lg text-sm px-5 py-2.5 mt-2 text-center font-semibold'
+									className='w-full text-white bg-gradient-to-r from-yellow-400 to-yellow-500 focus:ring-4 focus:outline-none rounded-lg text-sm px-5 py-2.5 mt-2 text-center font-semibold'
 									onClick={handleShowDisponibilidadModal(sede)}
 								>
 									Ver turnos
