@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
@@ -8,13 +8,48 @@ import moment from 'moment';
 import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faCircleCheck, faMoneyBillWave, faHandshake } from '@fortawesome/free-solid-svg-icons';
-import { GoogleMap, LoadScript, useLoadScript, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { faCircleXmark, faCircle, faCircleCheck, faMoneyBillWave, faHandshake } from '@fortawesome/free-solid-svg-icons';
+import { GoogleMap, LoadScript, useLoadScript, MarkerF, useJsApiLoader, Circle, CircleF, SymbolPath } from "@react-google-maps/api";
 import '../css/calendar.css';
 
 const VerMapaSede = ({ sede, show, onClose }) => {
 
-    const [map, setMap] = useState(null)
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const [map, setMap] = useState();
+    const accuracyCircle = useRef(null);
+    console.log('current Location: ', currentLocation);
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition( position => {
+                setCurrentLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+                console.log('current locationnn: ', position.coords);
+                const errorRange = position.coords.accuracy;
+                // if (accuracyCircle.current) {
+                //     accuracyCircle.current.setMap(null);
+                // }
+                // accuracyCircle.current = new google.maps.Circle({
+                //     center: position.coords,
+                //     fillColor: color['blue-700'],
+                //     fillOpacity: 0.4,
+                //     radius: errorRange,
+                //     strokeColor: color['blue-200'],
+                //     strokeOpacity: 0.4,
+                //     strokeWeight: 1,
+                //     zIndex: 1,
+                // });
+                // accuracyCircle.current.setMap(mapObject); // ADDED
+            },
+            (error) => {
+                console.error('Error getting the current location:', error);
+            });
+        } else {
+          console.error('Geolocation is not supported by this browser.');
+        }
+    }, []);
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -35,7 +70,15 @@ const VerMapaSede = ({ sede, show, onClose }) => {
     const containerStyle = {
         width: '300px',
         height: '600px'
-      };
+    };
+
+    const blueDot = {
+        fillColor: 'red',
+        fillOpacity: 1,
+        scale: 8,
+        strokeColor: 'green',
+        strokeWeight: 2,
+    };
 
     if(!show) return null;
 
@@ -55,15 +98,59 @@ const VerMapaSede = ({ sede, show, onClose }) => {
                     <div className='bg-white p-5 rounded flex flex-col gap-5 items-center justify-center'>
                         <p>Google maps</p>
                         { isLoaded ? (
-                            <GoogleMap
-                                mapContainerStyle={containerStyle}
-                                center={center}
-                                zoom={15}
-                            >
-                                <Marker
-                                    position={center}
-                                />
-                            </GoogleMap>
+                            <>
+                                <GoogleMap
+                                    mapContainerStyle = {containerStyle}
+                                    center = {center}
+                                    zoom = {15}
+                                    onLoad = {map => setMap(map)}
+                                >
+                                    <>
+                                        <MarkerF
+                                            position={center}
+                                        />
+                                        <MarkerF
+                                            position={currentLocation}
+                                            icon={{
+                                                path: window.google.maps.SymbolPath.CIRCLE,
+                                                fillColor: '#4285F4',
+                                                fillOpacity: 1,
+                                                strokeColor: 'white',
+                                                strokeWeight: 2,
+                                                scale: 8
+                                                // url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToc9tHuRl0_jAOBSnFblVXbCrBCKRKQj0ZAykfMpABo4lYC1EgbXWQTUIwPqYUvVAWJ5s&usqp=CAU',
+                                                // scale: 5.0
+                                            }}  
+                                        />
+                                        {/* <MarkerF
+                                            position = {currentLocation}
+                                            label = 'currentLocation'
+                                        /> */}
+                                        <CircleF
+                                            radius={150}
+                                            visible={true}
+                                            options={{
+                                                fillColor: '#61a0bf',
+                                                fillOpacity: 0.25,
+                                                strokeColor: 'grey',
+                                                strokeOpacity: 0.4,
+                                                strokeWeight: 1,
+                                                zIndex: 1,
+                                            }}
+                                            center={{ 
+                                                lat: currentLocation.lat,
+                                                lng: currentLocation.lng
+                                            }}
+                                        >
+                                        </CircleF>
+                                    </>
+                                </GoogleMap>
+                                <button 
+                                    onClick={()=> map.panTo({lat: currentLocation.lat, lng: currentLocation.lng})}
+                                >
+                                    Ver mi ubicacion
+                                </button>
+                            </>
                         ) : (
                             <p>Cargando mapa</p>
                         )}
