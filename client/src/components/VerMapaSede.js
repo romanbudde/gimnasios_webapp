@@ -16,12 +16,16 @@ const VerMapaSede = ({ sede, show, onClose }) => {
 
     const [currentLocation, setCurrentLocation] = useState(null);
     const [map, setMap] = useState();
+    const [stillLocatingYouMessage, setStillLocatingYouMessage] = useState(true);
     const accuracyCircle = useRef(null);
     console.log('current Location: ', currentLocation);
 
     useEffect(() => {
         if (navigator.geolocation) {
+            
+
             navigator.geolocation.getCurrentPosition( position => {
+                setStillLocatingYouMessage(false);
                 setCurrentLocation({
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
@@ -151,10 +155,14 @@ const VerMapaSede = ({ sede, show, onClose }) => {
                                 </GoogleMap>
                                 <button 
                                     onClick={()=> map.panTo({lat: currentLocation.lat, lng: currentLocation.lng})}
-                                    className='w-full py-5'
+                                    className='w-full py-3'
+                                    disabled={stillLocatingYouMessage}
                                 >
                                     Ver mi ubicacion
                                 </button>
+                                {stillLocatingYouMessage && (
+                                    <p className='font-medium py-2'>Buscando su ubicación, aguarde...</p>
+                                )}
                             </>
                         ) : (
                             <p>Cargando mapa</p>

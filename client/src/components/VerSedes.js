@@ -158,7 +158,7 @@ const VerSedes = () => {
 							>
 								<div className='flex flex-row items-center justify-end mb-1'>
 									<div
-										className='flex flex-row items-center gap-2 p-1.5 bg-gray-300 border border-gray-600 rounded-md'
+										className='flex flex-row items-center gap-2 p-1.5 bg-gray-300 border border-gray-300 rounded-md'
 										onClick={handleShowMapaSede(sede)}
 									>
 										<FontAwesomeIcon className='text-xl text-black' icon={faLocationDot} />
