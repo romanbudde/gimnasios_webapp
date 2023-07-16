@@ -63,8 +63,8 @@ const VerMapaSede = ({ sede, show, onClose }) => {
 	const cookies = new Cookies();
 
     const center = {
-        lat: -32.9558163,
-        lng: -60.6391125
+        lat: parseFloat(sede.latitude),
+        lng: parseFloat(sede.longitude)
     };
 
     const containerStyle = {
@@ -109,44 +109,49 @@ const VerMapaSede = ({ sede, show, onClose }) => {
                                         <MarkerF
                                             position={center}
                                         />
-                                        <MarkerF
-                                            position={currentLocation}
-                                            icon={{
-                                                path: window.google.maps.SymbolPath.CIRCLE,
-                                                fillColor: '#4285F4',
-                                                fillOpacity: 1,
-                                                strokeColor: 'white',
-                                                strokeWeight: 2,
-                                                scale: 8
-                                                // url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToc9tHuRl0_jAOBSnFblVXbCrBCKRKQj0ZAykfMpABo4lYC1EgbXWQTUIwPqYUvVAWJ5s&usqp=CAU',
-                                                // scale: 5.0
-                                            }}  
-                                        />
-                                        {/* <MarkerF
-                                            position = {currentLocation}
-                                            label = 'currentLocation'
-                                        /> */}
-                                        <CircleF
-                                            radius={150}
-                                            visible={true}
-                                            options={{
-                                                fillColor: '#61a0bf',
-                                                fillOpacity: 0.25,
-                                                strokeColor: 'grey',
-                                                strokeOpacity: 0.4,
-                                                strokeWeight: 1,
-                                                zIndex: 1,
-                                            }}
-                                            center={{ 
-                                                lat: currentLocation.lat,
-                                                lng: currentLocation.lng
-                                            }}
-                                        >
-                                        </CircleF>
+                                        {currentLocation && (
+                                        <>
+                                            <MarkerF
+                                                position={currentLocation}
+                                                icon={{
+                                                    path: window.google.maps.SymbolPath.CIRCLE,
+                                                    fillColor: '#4285F4',
+                                                    fillOpacity: 1,
+                                                    strokeColor: 'white',
+                                                    strokeWeight: 2,
+                                                    scale: 8
+                                                    // url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToc9tHuRl0_jAOBSnFblVXbCrBCKRKQj0ZAykfMpABo4lYC1EgbXWQTUIwPqYUvVAWJ5s&usqp=CAU',
+                                                    // scale: 5.0
+                                                }}  
+                                            />
+                                            {/* <MarkerF
+                                                position = {currentLocation}
+                                                label = 'currentLocation'
+                                            /> */}
+                                            <CircleF
+                                                radius={150}
+                                                visible={true}
+                                                options={{
+                                                    fillColor: '#61a0bf',
+                                                    fillOpacity: 0.25,
+                                                    strokeColor: 'grey',
+                                                    strokeOpacity: 0.4,
+                                                    strokeWeight: 1,
+                                                    zIndex: 1,
+                                                }}
+                                                center={{ 
+                                                    lat: currentLocation.lat,
+                                                    lng: currentLocation.lng
+                                                }}
+                                            >
+                                            </CircleF>
+                                        </>
+                                        )}
                                     </>
                                 </GoogleMap>
                                 <button 
                                     onClick={()=> map.panTo({lat: currentLocation.lat, lng: currentLocation.lng})}
+                                    className='w-full py-5'
                                 >
                                     Ver mi ubicacion
                                 </button>

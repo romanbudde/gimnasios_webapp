@@ -46,7 +46,9 @@ CREATE TABLE public.sede (
     address character varying NOT NULL,
     max_cupo integer NOT NULL,
     horarios json,
-    name character varying NOT NULL
+    name character varying NOT NULL,
+    latitude character varying,
+    longitude character varying
 );
 
 
@@ -216,15 +218,15 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sede; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.sede (id, address, max_cupo, horarios, name) FROM stdin;
-6	Pergamino 3751, C1437 CABA, Argentina	15	{"horarios":["01:00","06:00","07:00","08:00","18:00","19:00","22:00","23:00"]}	NEW sedeee
-3	Av. San Martín 4544, A4400 Salta, Argentina	888	{"horarios":["00:00","01:00","02:00","07:00","08:00"]}	Amici sede oeste
-7	Av. Pres. Perón 3883, El Palomar, Provincia de Buenos Aires, Argentina	25	{"horarios":["01:00","05:00","06:00","09:00","10:00","13:00","15:00","16:00","17:00"]}	New sede 2
-1	Av. San Martín 1575, A4400 Salta, Argentina	123	{"horarios":["00:00","01:00","02:00","03:00","04:00","10:00","14:00","16:00"]}	ASD mayuscula
-2	Av. San Martín 2595, A4400 Salta, Argentina	512	{"horarios":["00:00","02:00"]}	asd minuscula
-8	Soler 4000, C1425BWP CABA, Argentina	7	{"horarios":["01:00","02:00","04:00"]}	New sedeee jamaica
-9	Acevedo 865, Buenos Aires, Argentina	15	{}	Sede 91
-4	Av. San Martín 2595, A4400 Salta, Argentina	456	{"horarios":["00:00","09:00","10:00","12:00", "13:00","17:00","18:00","19:00"]}	Amici sede funes
+COPY public.sede (id, address, max_cupo, horarios, name, latitude, longitude) FROM stdin;
+8	Soler 4000, C1425BWP CABA, Argentina	7	{"horarios":["01:00","02:00","04:00"]}	New sedeee jamaica	\N	\N
+9	Acevedo 865, Buenos Aires, Argentina	15	{}	Sede 91	\N	\N
+4	Av. San Martín 2595, A4400 Salta, Argentina	456	{"horarios":["00:00","09:00","10:00","12:00", "13:00","17:00","18:00","19:00"]}	Amici sede funes	\N	\N
+6	Mendoza 555, S2000BHK Rosario, Santa Fe, Argentina	15	{"horarios":["01:00","06:00","07:00","08:00","18:00","19:00","22:00","23:00"]}	NEW sedeee	\N	\N
+3	Av. Pellegrini 4500, S2002 Rosario, Santa Fe, Argentina	888	{"horarios":["00:00","01:00","02:00","07:00","08:00"]}	Amici sede oeste	-32.9488075	-60.6873757
+7	Necochea 1051, Rosario, Santa Fe, Argentina	25	{"horarios":["01:00","05:00","06:00","09:00","10:00","13:00","15:00","16:00","17:00"]}	New sede 2	-32.9539631	-60.6255006
+1	Av. San Martín 1575, S2000 Rosario, Santa Fe, Argentina	123	{"horarios":["00:00","01:00","02:00","03:00","04:00","10:00","14:00","16:00"]}	ASD mayuscula	-32.9562589	-60.6388613
+2	Av. San Martín 2595, S2000 Rosario, Santa Fe, Argentina	512	{"horarios":["00:00","02:00"]}	asd minuscula	-32.9676447	-60.6416295
 \.
 
 

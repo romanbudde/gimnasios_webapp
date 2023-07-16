@@ -406,14 +406,14 @@ app.post("/reservas", async(req, res) => {
 app.put("/sedes/:id", async(req, res) => {
     try {
         const { id } = req.params;
-        const { address, name, cupo, horarios } = req.body;
+        const { address, name, cupo, horarios, latitude, longitude } = req.body;
         console.log('address: ', address);
         console.log('name: ', name);
         console.log('cupo: ', cupo);
         console.log('horarios: ', horarios);
         const updateSede = await pool.query(
-            "UPDATE sede SET address = $1, max_cupo = $2, name = $3, horarios = $4  WHERE id = $5 RETURNING *",
-            [address, cupo, name, horarios, id]
+            "UPDATE sede SET address = $1, max_cupo = $2, name = $3, horarios = $4, latitude = $5, longitude = $6 WHERE id = $7 RETURNING *",
+            [address, cupo, name, horarios, latitude, longitude, id]
         );
 
         console.log('updateSede: ', updateSede)
@@ -431,20 +431,20 @@ app.put("/sedes/:id", async(req, res) => {
     }
 });
 
-// create - un cuidador
+// create - una sede
 app.post('/sedes', async(req, res) => {
     try {
         console.log('---- backend post /sedes ----');
         console.log(req.body);
-        const { address, name, cupo, horarios } = req.body;
+        const { address, name, cupo, horarios, latitude, longitude } = req.body;
         
         console.log('---- current date ----');
         const created_at = new Date();
         console.log(created_at);
 
         const newSede = await pool.query(
-            "INSERT INTO sede (address, max_cupo, name, horarios) VALUES($1, $2, $3, $4) RETURNING *", 
-            [address, cupo, name, horarios]
+            "INSERT INTO sede (address, max_cupo, name, horarios, latitude, longitude) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", 
+            [address, cupo, name, horarios, latitude, longitude]
         );
 
         // res.json(req.body);

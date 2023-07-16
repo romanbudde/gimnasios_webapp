@@ -25,6 +25,8 @@ const AddSede = ( {sedes, setSedes, show, onClose, displayedSedes, setDisplayedS
     const [name, setName] = useState('');
     const [id, setId] = useState('');
     const [cupo, setCupo] = useState('');
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 	const [horarios, setHorarios] = useState([]);
 	const [editDataMessageError, setEditDataMessageError] = useState(false);
 	const [displayEditDataMessage, setDisplayEditDataMessage] = useState(false);
@@ -101,6 +103,8 @@ const AddSede = ( {sedes, setSedes, show, onClose, displayedSedes, setDisplayedS
 		
         try {
             const body = { ...values };
+			body.latitude = latitude;
+			body.longitude = longitude;
             console.log(JSON.stringify(body));
             console.log('---- end of body to be submitted ----');
             let newSede = {};
@@ -218,6 +222,8 @@ const AddSede = ( {sedes, setSedes, show, onClose, displayedSedes, setDisplayedS
 											onPlaceSelected={(place) => {
 												console.log(place);
 												console.log('formated address: ', place.formatted_address ? place.formatted_address : '');
+												setLatitude(place.geometry.location.lat());
+												setLongitude(place.geometry.location.lng());
 												setFieldValue('address', place.formatted_address ? place.formatted_address : '');
 											}}
 											options={{

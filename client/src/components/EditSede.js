@@ -21,6 +21,8 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
     const [name, setName] = useState('');
     const [id, setId] = useState('');
     const [cupo, setCupo] = useState('');
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 	const [editDataMessageError, setEditDataMessageError] = useState(false);
 	const [displayEditDataMessage, setDisplayEditDataMessage] = useState(false);
     const [horarios, setHorarios] = useState(sede.horarios ? sede.horarios.horarios : '');
@@ -92,6 +94,8 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 			// console.log('userType: ', user.type);
 			// console.log('enabled: ', user.enabled);
 			bodyJSON.horarios = { horarios: horarios };
+			bodyJSON.latitude = latitude;
+			bodyJSON.longitude = longitude;
 			console.log('bodyJSON: ', bodyJSON);
 			console.log('----------------- AT SUBMIT, Horarios: ', horarios)
             const id = sede.id;
@@ -306,6 +310,8 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 										onPlaceSelected={(place) => {
 											console.log(place);
 											console.log('formated address: ', place.formatted_address);
+											setLatitude(place.geometry.location.lat());
+											setLongitude(place.geometry.location.lng());
 											setFieldValue('address', place.formatted_address);
 										}}
 										options={{
