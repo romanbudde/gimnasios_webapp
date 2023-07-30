@@ -50,7 +50,7 @@ app.use(passport.session());
 app.use(router);
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "*"
 }))
 
 const storage = multer.diskStorage({
