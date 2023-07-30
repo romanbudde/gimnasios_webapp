@@ -88,6 +88,7 @@ const Home = () => {
 				<h1 className='flex justify-center font-bold text-lg py-4'>Gimnasio</h1>
 			</div>
 			<h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.REACT_APP_SERVER} asd</h1>
+			<h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.react_app_server} asd</h1>
 			<div className='space-y-2 p-10 mx-auto flex flex-col justify-center items-center'>
 				<div className='w-full pb-4'>
 					<h1 className='text-left font-medium text-3xl mb-2 text-blue-900'>Bienvenido!</h1>
