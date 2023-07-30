@@ -29,7 +29,7 @@ const Account = () => {
 		let formData = new FormData()
 		formData.append('file', image.data)
 		formData.append('user_id', userId)
-		const response = await fetch('http://localhost:5000/upload_image', {
+		const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `upload_image`, {
 		  method: 'POST',
 		  body: formData,
 		}).then(response => response.json())
@@ -90,7 +90,7 @@ const Account = () => {
 	}
 
 	const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/users/" + userId);
+		const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `users/${userId}`);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');
@@ -102,7 +102,7 @@ const Account = () => {
 	// get all users function
     const getUserTypes = async () => {
         try {
-            const response = await fetch("http://localhost:5000/user_types/");
+            const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `user_types/`);
             const jsonData = await response.json();
 
 			console.log('---- inside getUserTypes ----');
@@ -151,9 +151,9 @@ const Account = () => {
 									<img src={image.preview} className='rounded-full border-2 border-gray-200' width='125' height='100' />
 								) : (
 									user.profile_picture_url !== '' ? (
-										<img src={`http://localhost:5000/${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
 									) : (
-										<img src={`http://localhost:5000/no_picture.jpg`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `no_picture.jpg`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
 									)
 								)}
 								<FontAwesomeIcon icon={faCirclePlus} className='absolute right-2 bottom-1 text-3xl bg-white rounded-full'/>

@@ -106,7 +106,7 @@ const SedesAdmin = () => {
 	console.log('selected dates interval: ', selectedDatesInterval);
 
     const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/users/" + userId);
+		const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `users/${userId}`);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');
@@ -118,7 +118,7 @@ const SedesAdmin = () => {
 	// get all users function
 	const getSedes = async () => {
         try {
-            const response = await fetch("http://localhost:5000/sedes/");
+            const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `sedes/`);
             const jsonData = await response.json();
 
             setSedes(jsonData);

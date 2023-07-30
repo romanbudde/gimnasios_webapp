@@ -5,7 +5,7 @@
     <author email="roman_budde@hotmail.com" href="https://www.google.com.ar">
         Apache Cordova Team
     </author>
-    <content src="" />
+    <content src="/" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <access origin="*" />

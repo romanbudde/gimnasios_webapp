@@ -40,7 +40,7 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
     const getReservationsForSelectedSede = async () => {
         try {
             console.log('---------- sede.id: ', sede.id);
-            const response = await fetch("http://localhost:5000/reservas?sede_id=" + sede.id);
+            const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `reservas?sede_id=${sede.id}`);
             const jsonData = await response.json();
 
 			console.log('---- inside getReservationsForSelectedSede ----');
@@ -126,7 +126,7 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
             horario: checkedHorario
         };
 
-        const response = await fetch("http://localhost:5000/reservas/", {
+        const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `reservas/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

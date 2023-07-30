@@ -197,9 +197,9 @@ const MisContratos = () => {
     // get all reservas
     const getReservas = async () => {
         try {
-            console.log(`http://localhost:5000/reservas?user_id=${userId}`)
+            // console.log(`http://localhost:5000/reservas?user_id=${userId}`)
 
-            const response = await fetch(`http://localhost:5000/reservas?user_id=${userId}`);
+            const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `reservas?user_id=${userId}`);
             const jsonData = await response.json();
 
 			jsonData.sort((a, b) => {
@@ -220,7 +220,7 @@ const MisContratos = () => {
     };
 
     const getUserData = async () => {
-		const response = await fetch("http://localhost:5000/users/" + userId);
+		const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `users/${userId}`);
 		const jsonData = await response.json();
 
 		console.log('---- inside getUserData ----');

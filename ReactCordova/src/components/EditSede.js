@@ -100,7 +100,7 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 			console.log('----------------- AT SUBMIT, Horarios: ', horarios)
             const id = sede.id;
             const sedeUpdate = await fetch(
-                `http://localhost:5000/sedes/${sede.id}`,
+                (process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `sedes/${sede.id}`,
                 {
                     method: "PUT",
                     headers: {
