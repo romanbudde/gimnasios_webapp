@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import UserEditData from './UserEditData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faCirclePlus, faPenToSquare, faEnvelope, faComment, faMapPin } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
 import CuidadorBottomBar from './CuidadorBottomBar';
 
@@ -142,18 +142,18 @@ const Account = () => {
 						<ClientBottomBar/>
 					)}
 					<div className='w-full flex flex-col items-center px-5 space-y-3'>
-						<h1 className='font-medium text-lg'>Hola, {user.name}!</h1>
+						<h1 className='font-medium text-lg flex flex-row items-center gap-1'>Hola, <p className='p-1.5 rounded bg-yellow-200'>{user.name}!</p></h1>
 
 						<form onSubmit={handleSubmit} className='flex flex-col gap-3 items-center justify-center'>
 							<div className='relative'>
 								<input type='file' name='file' id='file' onChange={handleFileChange} className='z-50 absolute opacity-0 focus:outline-none w-full h-full'></input>
 								{image.preview ? (
-									<img src={image.preview} className='rounded-full border-2 border-gray-200' width='125' height='100' />
+									<img src={image.preview} className='rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
 								) : (
 									user.profile_picture_url !== '' ? (
-										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
 									) : (
-										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `no_picture.jpg`} alt='Profile pic' className='rounded-full border-2 border-gray-200' width='125' height='100' />
+										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `no_picture.jpg`} alt='Profile pic' className=' rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
 									)
 								)}
 								<FontAwesomeIcon icon={faCirclePlus} className='absolute right-2 bottom-1 text-3xl bg-white rounded-full'/>
@@ -181,9 +181,18 @@ const Account = () => {
 							onClose={handleClose}
 						/>
 						<div className='flex flex-col text-left space-y-4'>
-							<p>Tu mail actual es {user.mail}</p>
+							<div className='flex flex-row items-center gap-4'>
+								<FontAwesomeIcon icon={faEnvelope} className='text-2xl'/>
+								<p>Tu mail actual es {user.mail}</p>
+							</div>
+							<div className='flex flex-row items-center gap-4'>
+								<FontAwesomeIcon icon={faComment} className='text-2xl'/>
 							<p>Tu descripcion es: {user.description}</p>
+							</div>
+							<div className='flex flex-row items-center gap-4'>
+								<FontAwesomeIcon icon={faMapPin} className='text-2xl'/>
 							<p>Tu dirección es: {user.address}</p>
+							</div>
 							{ user.type === 1 && (
 								<>
 									<p>Tarifa por media hora: {user.hourly_rate}</p>

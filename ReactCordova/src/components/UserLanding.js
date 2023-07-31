@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faHouse, faMapLocationDot, faRectangleList, faUser } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
 // import { faHouse as heartSolido } from '@fortawesome/free-regular-svg-icons'
 
@@ -54,21 +54,24 @@ const ListUsers = () => {
 					</div>
 					<div className='space-y-5 p-10 my-2 mx-auto flex flex-col justify-center items-center'>
 						<button
-							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-left'
 							onClick={ (e) => { redirectVerSedes(e) }}
 						>
+							<FontAwesomeIcon icon={faMapLocationDot} className='text-4xl'/>
 							Ver las sedes
 						</button>
 						<button
-							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-left'
 							onClick={ (e) => { redirectVerMisReservas(e) }}
 						>
+							<FontAwesomeIcon icon={faRectangleList} className='text-4xl'/>
 							Ver mis reservas anteriores
 						</button>
 						<button
-							className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-left'
 							onClick={ (e) => { redirectProfile(e) }}
 						>
+							<FontAwesomeIcon icon={faUser} className='text-4xl mr-3'/>
 							Mi perfil
 						</button>
 					</div>
