@@ -13,7 +13,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import '../css/datepicker.css';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import ClientBottomBar from './ClientBottomBar';
+import CuidadorBottomBar from './CuidadorBottomBar';
 import Paginate from './Paginate';
 import Select from 'react-select';
 
@@ -418,7 +418,7 @@ const NewUsersAdmin = () => {
 		return (
 			<Fragment>
                 <div className='relative'>
-					<ClientBottomBar />
+					<CuidadorBottomBar />
 					<div className='flex flex-row items-center justify-center relative border-b-2 border-b-gray-200'>
 						<FontAwesomeIcon
 							className='absolute left-5'
@@ -426,6 +426,12 @@ const NewUsersAdmin = () => {
 							onClick={ redirectLanding }
 						/>
 						<h1 className='flex justify-center font-bold text-lg py-4'>Usuarios</h1>
+						<button
+							className='absolute right-3 bg-transparent text-green-500 font-semibold text-xl py-1 px-3 border border-green-600 rounded-lg'
+							onClick={handleAddUserModalOpen}
+						>
+							+
+						</button>
 					</div>
 					<div className='mb-28'>
 						<div className='flex flex-col mx-5 mt-2 gap-3'>
@@ -509,13 +515,10 @@ const NewUsersAdmin = () => {
 							</button>
 						</div>
 
+						<div className='border border-gray-300 my-5 mx-5'></div>
+
 						<div className='flex flex-row justify-center w-full'>
-							<button
-								className='bg-transparent text-green-500 font-semibold py-2 px-4 border border-green-600 rounded-lg w-2/3 my-5'
-								onClick={handleAddUserModalOpen}
-							>
-								Crear usuario
-							</button>
+							
 							{/* <button
 								className='text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-2/3 py-2.5 text-center shadow-lg'
 								onClick = {searchUsers}

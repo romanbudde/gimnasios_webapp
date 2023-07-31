@@ -135,7 +135,7 @@ const Account = () => {
 						<h1 className='flex justify-center font-bold text-lg py-4'>Mi perfil</h1>
 						<FontAwesomeIcon icon={faPenToSquare} className='text-2xl absolute right-5' onClick={handleShow} />
 					</div>
-					{ user.type === 1 && (
+					{ user.type === 2 && (
 						<CuidadorBottomBar/>
 					)}
 					{ user.type === 0 && (

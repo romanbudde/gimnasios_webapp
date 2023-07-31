@@ -17,7 +17,7 @@ const BottomBar = (userType) => {
 	const cookies = new Cookies();
 
 	const redirectLanding = () => {
-		navigate('/landing-cuidador');
+		navigate('/landing-admin');
 	}
 
 	if(isAuthenticated){
