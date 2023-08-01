@@ -30,7 +30,8 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
     const [horariosReservasExistentes, setHorariosReservasExistentes] = useState([]);
     const [userCantCreateReservaToday, setUserCantCreateReservaToday] = useState(false);
     const [horaDelTurnoYaReservadoPorUsuario, setHoraDelTurnoYaReservadoPorUsuario] = useState('');
-    const [seHanMostradoHorarios, setSeHanMostradoHorarios] = useState(false);
+    // const [seHanMostradoHorarios, setSeHanMostradoHorarios] = useState(false);
+    const [turnosHoyCounter, setTurnosHoyCounter] = useState(0);
 
 
 	let formattedDate = date.toLocaleDateString("en-GB");
@@ -166,47 +167,59 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
         console.log('222222222');
     }
 
-    console.log('sede.horarios.horarios: ', sede.horarios.horarios)
+    // console.log('sede.horarios.horarios: ', sede.horarios.horarios)
 
 	const renderHorarios = () => {
         const currentTime = moment().format('HH:mm');
+        console.log('render horarios - sede name ', sede.name)
+        console.log('render horarios - sede horarios ', sede.horarios)
+        console.log('render horarios - sede horarios.horarios ', sede.horarios.horarios)
+        console.log('condition ', sede.horarios && sede.horarios.horarios && sede.horarios.horarios.length > 0)
+        let horariosDisplayedCounter = 0;
 		if (sede.horarios && sede.horarios.horarios && sede.horarios.horarios.length > 0) {
-            return sede.horarios.horarios.map((horario, index) => {
-                // console.log('checkedHorarios: ', checkedHorarios);
-                // checkedHorarios.includes(horario) ? console.log('includes') : console.log('does NOT include');
-                if ( moment(currentTime, 'HH:mm').isBefore(moment(horario, 'HH:mm')) ) {
-                    console.log('---------mostrar horario')
-                    setSeHanMostradoHorarios(true);
-                    return(
-                        <li className='flex flex-row items-center p-7 gap-2 relative text-black' key={index}>
-                            <label htmlFor={horario} className='w-full flex items-center cursor-pointer'>
-                                <span className={`absolute p-5 inset-0 transition bg-gray-400 ${checkedHorario === horario ? 'bg-green-400' : ''}`}>
-                                    {horario}
-                                </span>
-                                <p className='absolute text-white right-5'>
-                                {horario in horariosReservasExistentes
-                                 ? `${horariosReservasExistentes[horario]}/${sede.max_cupo}`
-                                 : `0/${sede.max_cupo}`
-                                }
-                                </p>
-                                <input
-                                    type='checkbox'
-                                    className='hidden'
-                                    value={horario}
-                                    name={horario}
-                                    id={horario}
-                                    // onClick={ (e) => console.log('clicked an horario: ', horario)}
-                                    onChange={() => handleCheckboxChange(horario)}
-                                />
-                            </label>
-                        </li>
-                    );
-                }
-            });
+            const hasHorariosToShow = sede.horarios.horarios.some(horario =>
+                moment(currentTime, 'HH:mm').isBefore(moment(horario, 'HH:mm'))
+            );
+            if(hasHorariosToShow) {
+                return sede.horarios.horarios.map((horario, index) => {
+                    // console.log('checkedHorarios: ', checkedHorarios);
+                    // checkedHorarios.includes(horario) ? console.log('includes') : console.log('does NOT include');
+                    if ( moment(currentTime, 'HH:mm').isBefore(moment(horario, 'HH:mm')) ) {
+                        horariosDisplayedCounter++;
+                        console.log('---------mostrar horario, ', horariosDisplayedCounter);
+                        return(
+                            <li className='flex flex-row items-center p-7 gap-2 relative text-black' key={index}>
+                                <label htmlFor={horario} className='w-full flex items-center cursor-pointer'>
+                                    <span className={`absolute p-5 inset-0 transition bg-gray-400 ${checkedHorario === horario ? 'bg-green-400' : ''}`}>
+                                        {horario}
+                                    </span>
+                                    <p className='absolute text-gray-700 right-5'>
+                                    {horario in horariosReservasExistentes
+                                     ? `${horariosReservasExistentes[horario]}/${sede.max_cupo}`
+                                     : `0/${sede.max_cupo}`
+                                    }
+                                    </p>
+                                    <input
+                                        type='checkbox'
+                                        className='hidden'
+                                        value={horario}
+                                        name={horario}
+                                        id={horario}
+                                        // onClick={ (e) => console.log('clicked an horario: ', horario)}
+                                        onChange={() => handleCheckboxChange(horario)}
+                                    />
+                                </label>
+                            </li>
+                        );
+                    }
+    
+                });
+            }
 		}
-		else {
+		if(horariosDisplayedCounter === 0) {
+            console.log('NO SE HAN M<OSTRADO HGORARIOS')
 			return (
-				<li className="p-2 pl-5 bg-slate-400 ">
+				<li className="p-2 pl-5 text-center bg-gray-300 ">
 				    <p>No hay horarios disponibles</p>
 				</li>
 			);
@@ -237,12 +250,12 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
                                     {/* {console.log('formatted date: ', formattedDate)} */}
                                     {renderHorarios()}
                                 </ul>
-                                {!seHanMostradoHorarios && (
+                                {/* {!seHanMostradoHorarios && (
                                     <p className='text-black text-center font-medium bg-gray-300 p-2 rounded-md'>No quedan horarios disponibles por este día.</p>
-                                )}
+                                )} */}
                                 {sede.horarios && sede.horarios.horarios && sede.horarios.horarios.length > 0 && (
                                     <button 
-                                        disabled={!seHanMostradoHorarios}
+                                        // disabled={!seHanMostradoHorarios}
                                         className='bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                                         onClick={ createReservation }
                                     >
