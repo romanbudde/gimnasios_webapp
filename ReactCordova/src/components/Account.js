@@ -121,6 +121,8 @@ const Account = () => {
     }, []);
 
 	console.log('image.preview: ', image.preview)
+	console.log((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `no_picture.jpg`)
+	console.log(user.profile_picture_url !== null && user.profile_picture_url !== '')
 
 	if(isAuthenticated){
 		return (
@@ -150,7 +152,7 @@ const Account = () => {
 								{image.preview ? (
 									<img src={image.preview} className='rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
 								) : (
-									user.profile_picture_url !== '' ? (
+									user.profile_picture_url !== null && user.profile_picture_url !== '' ? (
 										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `${user.profile_picture_url}`} alt='Profile pic' className='rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
 									) : (
 										<img src={(process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `no_picture.jpg`} alt='Profile pic' className=' rounded-full border-2 border-gray-200 object-cover w-32 max-w-32 h-32 max-h-32' width='125' height='125' />
