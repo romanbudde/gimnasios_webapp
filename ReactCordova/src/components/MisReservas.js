@@ -19,6 +19,7 @@ import cash_bill_icon from "../images/cash-bill.svg";
 
 const MisContratos = () => {
 	const { isAuthenticated, userId } = useContext(AuthContext);
+    const [sedes, setSedes] = useState([]);
     const [reservas, setReservas] = useState([]);
     const [displayedReservas, setDisplayedReservas] = useState([]);
     const [dateFilter, setDateFilter] = useState('newest');
@@ -229,10 +230,25 @@ const MisContratos = () => {
 		setUser(jsonData);
 	}
 
+	// get all sedes function
+	const getSedes = async () => {
+        try {
+            const response = await fetch((process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : `http://localhost:5000/`) + `sedes/`);
+            const jsonData = await response.json();
+
+            setSedes(jsonData);
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+	console.log('-------sedes: ', sedes)
+
     // when page loads, get all Users
     useEffect(() => {
         getReservas();
         getUserData();
+		getSedes();
     }, []);
 
     // console.log('contracts');
@@ -292,8 +308,8 @@ const MisContratos = () => {
 								>
 									<p>Fecha: {reserva.date}</p>
 									<p>Hora: {reserva.horario}</p>
-									<p>Sede: </p>
-									<p>Ubicacion de la sede: </p>
+									<p>Sede: {sedes.find(sede => sede.id === reserva.sede_id)?.name}</p>
+									<p>Dirección de la sede: {sedes.find(sede => sede.id === reserva.sede_id)?.address}</p>
 								</div>
 							))
 						)}
