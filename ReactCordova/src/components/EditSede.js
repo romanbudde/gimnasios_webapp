@@ -26,17 +26,25 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 	const [editDataMessageError, setEditDataMessageError] = useState(false);
 	const [displayEditDataMessage, setDisplayEditDataMessage] = useState(false);
     const [horarios, setHorarios] = useState(sede.horarios ? sede.horarios.horarios : '');
-	const [checkedHorarios, setCheckedHorarios] = useState(sede.horarios ? sede.horarios.horarios : '');
+	const [checkedHorarios, setCheckedHorarios] = useState(sede.horarios && Array.isArray(sede.horarios.horarios) ? sede.horarios.horarios : []);
     // const [userType, setUserType] = useState('');
 	const navigate = useNavigate();
 	const cookies = new Cookies();
 
+	// console.log('options unfiltered: ', optionsUnfiltered)
+	console.log('--------- Array.isArray(sede.horarios.horarios): ', Array.isArray(sede.horarios.horarios))
+	console.log('--------- sede.horarios.horarios: ', sede.horarios.horarios)
+	console.log('--------- horarios: ', horarios)
+	console.log('--------- sede.horarios: ', sede.horarios)
+	console.log('--------- checked horarios: ', checkedHorarios)
+
 	const handleCheckboxChange = (horario) => {
         console.log('clicked an horario: ', horario);
-        if (checkedHorarios.includes(horario)) {
+        if (checkedHorarios && checkedHorarios.includes(horario)) {
 			setCheckedHorarios(checkedHorarios.filter((item) => item !== horario).sort());
 			setHorarios(checkedHorarios.filter((item) => item !== horario).sort());
         } else {
+			console.log('else. checkedHorarios es: ', checkedHorarios)
 			setCheckedHorarios([...checkedHorarios, horario].sort());
 			setHorarios([...checkedHorarios, horario].sort());
         }
@@ -172,11 +180,6 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 		{ value: '23:00', label: '23:00' },
 	];
 
-	// console.log('options unfiltered: ', optionsUnfiltered)
-	console.log('--------- horarios: ', horarios)
-	console.log('--------- sede.horarios: ', sede.horarios)
-	console.log('--------- checked horarios: ', checkedHorarios)
-
     return (
         <Fragment>
 			<Formik
@@ -268,7 +271,7 @@ const EditSede = ({ sede, sedes, setSedes, displayedSedes, setDisplayedSedes, sh
 										{ optionsUnfiltered.map((horario, index) => (
 											<li className='flex flex-row items-center p-7 gap-2 relative' key={index}>
 												<label htmlFor={horario.value} className='w-full flex items-center cursor-pointer'>
-													<span className={`absolute p-5 text-md inset-0 transition ${checkedHorarios.includes(horario.value) ? 'bg-green-400' : 'bg-gray-300'}`}>
+													<span className={`absolute p-5 text-md inset-0 transition ${checkedHorarios && checkedHorarios.includes(horario.value) ? 'bg-green-400' : 'bg-gray-300'}`}>
 														{horario.value}
 													</span>
 													<input

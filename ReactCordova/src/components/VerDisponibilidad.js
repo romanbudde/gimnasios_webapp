@@ -30,6 +30,7 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
     const [horariosReservasExistentes, setHorariosReservasExistentes] = useState([]);
     const [userCantCreateReservaToday, setUserCantCreateReservaToday] = useState(false);
     const [horaDelTurnoYaReservadoPorUsuario, setHoraDelTurnoYaReservadoPorUsuario] = useState('');
+    const [seHanMostradoHorarios, setSeHanMostradoHorarios] = useState(false);
 
 
 	let formattedDate = date.toLocaleDateString("en-GB");
@@ -165,6 +166,8 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
         console.log('222222222');
     }
 
+    console.log('sede.horarios.horarios: ', sede.horarios.horarios)
+
 	const renderHorarios = () => {
         const currentTime = moment().format('HH:mm');
 		if (sede.horarios && sede.horarios.horarios && sede.horarios.horarios.length > 0) {
@@ -172,6 +175,8 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
                 // console.log('checkedHorarios: ', checkedHorarios);
                 // checkedHorarios.includes(horario) ? console.log('includes') : console.log('does NOT include');
                 if ( moment(currentTime, 'HH:mm').isBefore(moment(horario, 'HH:mm')) ) {
+                    console.log('---------mostrar horario')
+                    setSeHanMostradoHorarios(true);
                     return(
                         <li className='flex flex-row items-center p-7 gap-2 relative text-black' key={index}>
                             <label htmlFor={horario} className='w-full flex items-center cursor-pointer'>
@@ -232,8 +237,12 @@ const VerDisponibilidad = ({ sede, show, onClose }) => {
                                     {/* {console.log('formatted date: ', formattedDate)} */}
                                     {renderHorarios()}
                                 </ul>
+                                {!seHanMostradoHorarios && (
+                                    <p className='text-black text-center font-medium bg-gray-300 p-2 rounded-md'>No quedan horarios disponibles por este día.</p>
+                                )}
                                 {sede.horarios && sede.horarios.horarios && sede.horarios.horarios.length > 0 && (
                                     <button 
+                                        disabled={!seHanMostradoHorarios}
                                         className='bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                                         onClick={ createReservation }
                                     >
