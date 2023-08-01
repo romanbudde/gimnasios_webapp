@@ -49,21 +49,21 @@ const LandingAdmin = () => {
 					</div>
 					<div className='space-y-5 p-7 my-2 mx-auto flex flex-col justify-center items-center'>
 						<button
-							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
 							onClick={ (e) => { redirectSedes(e) }}
 						>
 							<FontAwesomeIcon icon={faMapLocationDot} className='text-3xl mr-1'/>
 							Sedes
 						</button>
 						<button
-							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
 							onClick={ (e) => { redirectUsuarios(e) }}
 						>
 							<FontAwesomeIcon icon={faUserGroup} className='text-3xl'/>
 							Usuarios
 						</button>
 						<button
-							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
+							className='w-full flex flex-row items-center justify-start gap-5 text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-5 text-center'
 							onClick={ (e) => { redirectProfile(e) }}
 						>
 							<FontAwesomeIcon icon={faUser} className='text-3xl mr-3'/>

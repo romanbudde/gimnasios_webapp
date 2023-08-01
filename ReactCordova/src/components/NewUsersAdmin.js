@@ -508,7 +508,7 @@ const NewUsersAdmin = () => {
 
 						<div className='flex flex-row justify-center'>
 							<button
-								className='text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-2/3 py-2.5 text-center shadow-lg'
+								className='text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm w-2/3 py-2.5 text-center shadow-lg'
 								onClick = {searchUsers}
 							>
 								Buscar usuarios

@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import UserEditData from './UserEditData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faCirclePlus, faPenToSquare, faEnvelope, faComment, faMapPin } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faCirclePlus, faPenToSquare, faEnvelope, faComment, faMapPin, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import ClientBottomBar from './ClientBottomBar';
 import CuidadorBottomBar from './CuidadorBottomBar';
 
@@ -190,8 +190,8 @@ const Account = () => {
 							<p>Tu descripcion es: {user.description}</p>
 							</div>
 							<div className='flex flex-row items-center gap-4'>
-								<FontAwesomeIcon icon={faMapPin} className='text-2xl'/>
-							<p>Tu dirección es: {user.address}</p>
+								<FontAwesomeIcon icon={faMapPin} className='text-2xl pr-2'/>
+								<p>Tu dirección es: {user.address}</p>
 							</div>
 							{ user.type === 1 && (
 								<>
@@ -199,6 +199,13 @@ const Account = () => {
 									<p>Puntaje promedio segun las reseñas: {user.average_review_score}</p>
 								</>
 							)}
+							<div
+								className='flex flex-row gap-4 pt-12 items-center'
+								onClick={logout}
+							>
+								<FontAwesomeIcon className='text-2xl rotate-180' icon={faRightFromBracket} />
+								<p className='text-gray-700 font-medium text-lg'>Cerrar sesión</p>
+							</div>
 						</div>
 					</div>
 				</div>

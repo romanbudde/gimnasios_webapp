@@ -87,11 +87,11 @@ const Home = () => {
 			<div className='flex flex-row items-center w-full justify-center relative border-b-2 border-b-gray-200'>
 				<h1 className='flex justify-center font-bold text-lg py-4'>Gimnasio</h1>
 			</div>
-			<h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.REACT_APP_SERVER} asd</h1>
-			<h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.react_app_server} asd</h1>
+			{/* <h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.REACT_APP_SERVER} asd</h1>
+			<h1 className='flex justify-center font-bold text-lg py-4'>asd {process.env.react_app_server} asd</h1> */}
 			<div className='space-y-2 p-10 mx-auto flex flex-col justify-center items-center'>
 				<div className='w-full pb-4'>
-					<h1 className='text-left font-medium text-3xl mb-2 text-blue-900'>Bienvenido!</h1>
+					<h1 className='text-left font-medium text-3xl mb-2 text-yellow-900'>Bienvenido!</h1>
 					<h4 className='text-left font-semibold mb-16 text-gray-500'>Inicia sesión con tu cuenta</h4>
 					<label
 						className={`${ credentialsErrorMessage ? 'block mb-1 mr-auto text-sm font-medium text-red-600 dark:text-white' : 'block mb-1 mr-auto text-sm font-medium text-gray-900 dark:text-white'}`}
@@ -101,7 +101,7 @@ const Home = () => {
 					<input
 						type="email"
 						name="email"
-						className={`${ credentialsErrorMessage ? 'bg-red-500 border text-gray-900 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-red-500 border-solid border-opacity-100 focus:outline-none focus:outline-0 placeholder-red-500' : 'bg-gray-50 border text-gray-900 text-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'} shadow-md`}
+						className={`${ credentialsErrorMessage ? 'bg-red-500 border text-gray-900 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-red-500 border-solid border-opacity-100 focus:outline-none focus:outline-0 placeholder-red-500' : 'bg-gray-50 border text-gray-900 text-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'} shadow-md`}
 						placeholder="youremail@email.com"
 						value={email}
 						onChange={e => setEmail(e.target.value)}
@@ -117,13 +117,13 @@ const Home = () => {
 					<input
 						type="password"
 						name="password"
-						className={`${ credentialsErrorMessage ? 'bg-red-500 border text-gray-900 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-red-500 border-solid border-opacity-100 focus:outline-none focus:outline-0 placeholder-red-500' : 'bg-gray-50 border text-gray-900 text-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'} shadow-md`}
+						className={`${ credentialsErrorMessage ? 'bg-red-500 border text-gray-900 text-sm focus:ring-red-500 focus:border-red-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-red-500 border-solid border-opacity-100 focus:outline-none focus:outline-0 placeholder-red-500' : 'bg-gray-50 border text-gray-900 text-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 bg-transparent rounded-lg border-b border-gray-400 border-solid border-opacity-100 focus:outline-none focus:outline-0'} shadow-md`}
 						value={password}
 						placeholder="•••••••••"
 						onChange={e => setPassword(e.target.value)}
 					/>
 				</div>
-				<a className="text-cyan-500 ml-auto font-bold text-md pb-2" href="">
+				<a className="text-yellow-500 ml-auto font-bold text-md pb-2" href="">
 					Olvidaste tu contraseña?
 				</a>
 				{ credentialsErrorMessage && (
@@ -133,14 +133,14 @@ const Home = () => {
 				)}
 				<button 
 					type="submit"
-					className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					className="w-full text-white bg-gradient-to-r from-yellow-400 to-yellow-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					onClick={ (e) => { loginUser(e) }}
 				>
 					Iniciar sesión
 				</button>
 				<div className="flex flex-row w-full justify-between">
 					<a href="/register">No tienes una cuenta?</a>
-					<a className="text-cyan-500 font-bold" href="/register">Crear cuenta</a>
+					<a className="text-yellow-500 font-bold" href="/register">Crear cuenta</a>
 				</div>
 			</div>
 	
